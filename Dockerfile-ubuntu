@@ -1,0 +1,10 @@
+FROM ubuntu:14.04
+MAINTAINER Mezuro Team <mezurometrics@gmail.com>
+
+RUN apt-get update
+RUN apt-get -y upgrade
+
+ADD src /root/mezuro/src
+ADD scripts /root/mezuro/scripts
+
+CMD ["/root/mezuro/scripts/kalibro_configurations.sh"]
