@@ -2,7 +2,10 @@ FROM ubuntu:14.04
 MAINTAINER Mezuro Team <mezurometrics@gmail.com>
 
 RUN apt-get update
+
 RUN apt-get -y upgrade
+RUN apt-get install -y build-essential ruby1.9.1-full rubygems1.9.1
+RUN gem install pkgr --no-ri --no-rdoc
 
 ADD src /root/mezuro/src
 ADD scripts /root/mezuro/scripts
