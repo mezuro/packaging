@@ -11,7 +11,9 @@ end
 desc 'Create build dirs and fetch source files'
 task :mk_structure do
   sh "mkdir -p src"
-  sh "git clone https://github.com/mezuro/kalibro_configurations.git -b #{CONFIGURATIONS_TAG} src/kalibro_configurations"
+  unless Dir.exists?("#{Dir.pwd}/src/kalibro_configurations")
+    sh "git clone https://github.com/mezuro/kalibro_configurations.git -b #{CONFIGURATIONS_TAG} src/kalibro_configurations"
+  end
   sh "mkdir -p pkgs"
 end
 
