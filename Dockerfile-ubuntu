@@ -5,9 +5,9 @@ RUN apt-get update
 
 RUN apt-get -y upgrade
 RUN apt-get install -y build-essential ruby1.9.1-full rubygems1.9.1 git curl libmysqlclient-dev libpq-dev libevent-dev libssl-dev libxml2-dev libxslt1-dev libreadline-dev
-RUN gem install pkgr --no-ri --no-rdoc
+RUN gem install pkgr bundler --no-ri --no-rdoc
 
 ADD src /root/mezuro/src
 ADD scripts /root/mezuro/scripts
 
-CMD ["/root/mezuro/scripts/kalibro_configurations.sh"]
+CMD ["/root/mezuro/scripts/kalibro_configurations/run.sh"]

@@ -13,8 +13,9 @@ task :mk_structure do
   sh "mkdir -p src"
   unless Dir.exists?("#{Dir.pwd}/src/kalibro_configurations")
     sh "git clone https://github.com/mezuro/kalibro_configurations.git -b #{CONFIGURATIONS_TAG} src/kalibro_configurations"
+    sh "cp #{Dir.pwd}/scripts/kalibro_configurations/.pkgr.yml #{Dir.pwd}/src/kalibro_configurations"
   end
-  sh "mkdir -p pkgs"
+  sh "mkdir -p pkgs/kalibro_configurations"
 end
 
 desc 'Undo mk_structure'
