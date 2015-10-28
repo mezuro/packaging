@@ -1,4 +1,3 @@
 #!/bin/bash
 
-cd /root/mezuro/pkgs/kalibro_configurations
-echo "Package!" &> log
+fpm-cook package --pkg-dir /root/mezuro/pkgs/kalibro_configurations /root/mezuro/scripts/kalibro_configurations/recipe.rb
