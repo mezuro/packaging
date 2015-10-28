@@ -4,7 +4,11 @@ MAINTAINER Mezuro Team <mezurometrics@gmail.com>
 RUN apt-get update
 
 RUN apt-get -y upgrade
-RUN apt-get install -y build-essential \
+RUN apt-get install -y \
+  build-essential \
+  ruby \
+  rubygems-integration \
+  bundler \
   git \
   curl \
   libpq-dev \
@@ -14,6 +18,7 @@ RUN apt-get install -y build-essential \
   libxslt1-dev \
   libreadline-dev \
   libsqlite3-dev
+RUN gem install fpm-cookery
 
 ADD src /root/mezuro/src
 ADD scripts /root/mezuro/scripts
