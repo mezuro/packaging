@@ -21,7 +21,8 @@ class KalibroConfigurations < FPM::Cookery::Recipe
   end
 
   def install
-    etc('mezuro/kalibro-configurations').install_p 'config/database.yml.postgresql_sample', 'database.yml'
+    etc('mezuro/kalibro-configurations').install 'config/database.yml.postgresql_sample', 'database.yml'
+    ln_s '/etc/mezuro/kalibro-configurations/database.yml', 'config/database.yml'
     share('mezuro/kalibro-configurations').install Dir['*']
     share('mezuro/kalibro-configurations').install %w(.bundle)
   end
