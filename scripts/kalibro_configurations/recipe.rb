@@ -1,10 +1,10 @@
 class KalibroConfigurations < FPM::Cookery::Recipe
 
   name     'kalibro-configurations'
-  version  'v1.2.0'
-  source   'https://github.com/mezuro/kalibro_configurations.git', :with => :git, :tag => version
+  version  '1.2.0'
+  source   'https://github.com/mezuro/kalibro_configurations.git', :with => :git, :tag => "v#{version}"
 
-  maintainer  'Mezro Team <mezurometrics@gmail.com>'
+  maintainer  'Mezuro Team <mezurometrics@gmail.com>'
   license     'AGPLv3'
   description 'Web service for managing code analysis configurations'
   arch        'all'
@@ -13,21 +13,16 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
   config_files '/etc/mezuro/kalibro-configurations/database.yml'
 
-  depends 'postgresql'
+  build_depends 'ruby', 'bundler'
+  depends 'postgresql', 'ruby', 'bundler'
 
   def build
-    gemhome = Pathname.pwd.join('.gemhome').to_s
-
-    ENV['GEM_HOME'] = gemhome
-
-    safesystem('gem install bundler --no-ri --no-rdoc')
-
-    safesystem("#{gemhome}/bin/bundle install --deployment --without development:test")
+    safesystem("bundle install --deployment --without development:test --path vendor/bundle")
   end
 
   def install
     etc('mezuro/kalibro-configurations').install_p 'config/database.yml.postgresql_sample', 'database.yml'
-    share('kalibro-configurations').install Dir['*']
-    share('kalibro-configurations').install %w(.bundle .gitignore .gemhome)
+    share('mezuro/kalibro-configurations').install Dir['*']
+    share('mezuro/kalibro-configurations').install %w(.bundle)
   end
 end
