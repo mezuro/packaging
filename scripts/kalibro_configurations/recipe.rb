@@ -13,14 +13,20 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
   config_files '/etc/mezuro/kalibro-configurations/database.yml'
 
-  build_depends 'ruby', 'bundler'
   depends 'postgresql', 'ruby', 'bundler'
 
   def build
+    inline_replace 'config/database.yml.postgresql_sample' do |s|
+      s.gsub! /^(\s*)username:(.*)/, ''
+      s.gsub! /^(\s*)password:(.*)/, ''
+    end
+
     safesystem("bundle install --deployment --without development:test --path vendor/bundle")
   end
 
   def install
+    safesystem('sudo -u postgres psql -c "create role root with createdb login"')
+
     etc('mezuro/kalibro-configurations').install 'config/database.yml.postgresql_sample', 'database.yml'
     ln_s '/etc/mezuro/kalibro-configurations/database.yml', 'config/database.yml'
     share('mezuro/kalibro-configurations').install Dir['*']
