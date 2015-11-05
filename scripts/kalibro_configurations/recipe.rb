@@ -17,19 +17,21 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
   def build
     inline_replace 'config/database.yml.postgresql_sample' do |s|
-      s.gsub! /^(\s*)username:(.*)/, ''
+      s.gsub! /^(\s*)username:(.*)/, '  template: :template0'
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
     safesystem("bundle install --deployment --without development:test --path vendor/bundle")
+    etc('mezuro/kalibro-configurations').install 'config/database.yml.postgresql_sample', 'database.yml'
   end
 
   def install
     safesystem('sudo -u postgres psql -c "create role root with createdb login"')
 
-    etc('mezuro/kalibro-configurations').install 'config/database.yml.postgresql_sample', 'database.yml'
     ln_s '/etc/mezuro/kalibro-configurations/database.yml', 'config/database.yml'
     share('mezuro/kalibro-configurations').install Dir['*']
     share('mezuro/kalibro-configurations').install %w(.bundle)
+    system('ls /etc/mezuro/kalibro-configurations')
+    safesystem('bundle exec rake db:setup --trace')
   end
 end
