@@ -1,7 +1,5 @@
 task default: %w[ubuntu]
 
-CONFIGURATIONS_TAG = 'v1.2.0'
-
 desc 'Build the whole Mezuro packages for Ubuntu'
 task :ubuntu => [:mk_structure] do
   sh 'docker build --rm=true --tag mezuro-ubuntu-build -f Dockerfile-ubuntu .'
@@ -15,5 +13,6 @@ end
 
 desc 'Undo mk_structure'
 task :clean do
+  sh 'docker build --rm=true --no-cache=true --tag mezuro-ubuntu-build -f Dockerfile-ubuntu .'
   sh "rm -rf src pkgs"
 end
