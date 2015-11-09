@@ -4,7 +4,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
   include GeneratePostInstall
 
   name     'kalibro-configurations'
-  version  '1.2.2'
+  version  '1.2.3'
   source   'https://github.com/mezuro/kalibro_configurations.git', :with => :git, :tag => "v#{version}"
 
   maintainer  'Mezuro Team <mezurometrics@gmail.com>'
@@ -14,7 +14,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
   revision '1'
 
-  config_files '/etc/mezuro/kalibro-configurations/database.yml'
+  config_files '/etc/mezuro/kalibro-configurations/database.yml', '/etc/mezuro/kalibro-configurations/secrets.yml'
 
   depends 'postgresql', 'ruby', 'bundler'
 
@@ -26,19 +26,18 @@ class KalibroConfigurations < FPM::Cookery::Recipe
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
-    generate_post_install("#{File.dirname(__FILE__)}/post_install.rb", 'kalibro-configurations')
+    generate_post_install("#{File.dirname(__FILE__)}/post_install.rb", 'kalibro-configurations', 8083)
 
     safesystem("bundle install --deployment --without development:test --path vendor/bundle")
-    safesystem("bundle exec foreman export systemd -a #{name} -u #{name.gsub('-', '_')} .")
   end
 
   def install
     etc('mezuro/kalibro-configurations').install 'config/database.yml.postgresql_sample', 'database.yml'
     ln_s '/etc/mezuro/kalibro-configurations/database.yml', 'config/database.yml'
+    etc('mezuro/kalibro-configurations').install 'config/secrets.yml', 'secrets.yml'
+    rm 'config/secrets.yml'
+    ln_s '/etc/mezuro/kalibro-configurations/secrets.yml', 'config/secrets.yml'
     share('mezuro/kalibro-configurations').install Dir['*']
     share('mezuro/kalibro-configurations').install %w(.bundle)
-    lib('systemd/system').install 'kalibro-configurations.target', 'kalibro-configurations.target'
-    lib('systemd/system').install 'kalibro-configurations-web.target', 'kalibro-configurations-web.target'
-    lib('systemd/system').install 'kalibro-configurations-web-1.service', 'kalibro-configurations-web-1.service'
   end
 end
