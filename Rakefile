@@ -1,9 +1,9 @@
-task default: %w[ubuntu]
+task default: %w[debian]
 
 desc 'Build the whole Mezuro packages for Ubuntu'
-task :ubuntu => [:mk_structure] do
-  sh 'docker build --rm=true --tag mezuro-ubuntu-build -f Dockerfile-ubuntu .'
-  sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-ubuntu-build"
+task :debian => [:mk_structure] do
+  sh 'docker build --rm=true --tag mezuro-debian-build -f Dockerfile-debian .'
+  sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-debian-build"
 end
 
 desc 'Create build dirs and fetch source files'
@@ -13,6 +13,6 @@ end
 
 desc 'Undo mk_structure'
 task :clean do
-  sh 'docker build --rm=true --no-cache=true --tag mezuro-ubuntu-build -f Dockerfile-ubuntu .'
+  sh 'docker build --rm=true --no-cache=true --tag mezuro-debian-build -f Dockerfile-debian .'
   sh "rm -rf src pkgs"
 end
