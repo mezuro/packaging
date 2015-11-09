@@ -4,7 +4,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
   include GeneratePostInstall
 
   name     'kalibro-configurations'
-  version  '1.2.1'
+  version  '1.2.2'
   source   'https://github.com/mezuro/kalibro_configurations.git', :with => :git, :tag => "v#{version}"
 
   maintainer  'Mezuro Team <mezurometrics@gmail.com>'
@@ -29,6 +29,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
     generate_post_install("#{File.dirname(__FILE__)}/post_install.rb", 'kalibro-configurations')
 
     safesystem("bundle install --deployment --without development:test --path vendor/bundle")
+    safesystem("bundle exec foreman export systemd -a #{name} -u #{name.gsub('-', '_')} .")
   end
 
   def install
@@ -36,5 +37,8 @@ class KalibroConfigurations < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/kalibro-configurations/database.yml', 'config/database.yml'
     share('mezuro/kalibro-configurations').install Dir['*']
     share('mezuro/kalibro-configurations').install %w(.bundle)
+    lib('systemd/system').install 'kalibro-configurations.target', 'kalibro-configurations.target'
+    lib('systemd/system').install 'kalibro-configurations-web.target', 'kalibro-configurations-web.target'
+    lib('systemd/system').install 'kalibro-configurations-web-1.service', 'kalibro-configurations-web-1.service'
   end
 end
