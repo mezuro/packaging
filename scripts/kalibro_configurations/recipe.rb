@@ -16,7 +16,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
   config_files '/etc/mezuro/kalibro-configurations/database.yml', '/etc/mezuro/kalibro-configurations/secrets.yml'
 
-  depends 'postgresql', 'ruby', 'bundler'
+  depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-9.4'
 
   post_install "post_install.rb"
 
@@ -28,7 +28,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
     generate_post_install("#{File.dirname(__FILE__)}/post_install.rb", 'kalibro-configurations', 8083)
 
-    safesystem("bundle install --deployment --without development:test --path vendor/bundle")
+    safesystem("bundle package --all --all-platforms")
   end
 
   def install

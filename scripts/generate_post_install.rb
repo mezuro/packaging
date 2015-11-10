@@ -22,6 +22,8 @@ unless system("sudo -u postgres psql -tAc \\"SELECT 1 FROM pg_roles WHERE rolnam
 end
 
 Dir.chdir('#{homedir}') do
+  system("bundle install --deployment --without development:test")
+
   unless system('sudo -u postgres psql -lqt | cut -d \\| -f 1 | grep -w #{username}_production')
     system("sudo -u #{username} RAILS_ENV=production bundle exec rake db:setup")
   else
