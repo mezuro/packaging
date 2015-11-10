@@ -22,7 +22,7 @@ unless system("sudo -u postgres psql -tAc \\"SELECT 1 FROM pg_roles WHERE rolnam
 end
 
 Dir.chdir('#{homedir}') do
-  unless system("sudo -u postgres psql -lqt | cut -d \\| -f 1 | grep -w #{username}_production")
+  unless system('sudo -u postgres psql -lqt | cut -d \\| -f 1 | grep -w #{username}_production')
     system("sudo -u #{username} RAILS_ENV=production bundle exec rake db:setup")
   else
     system("sudo -u #{username} RAILS_ENV=production bundle exec rake db:migrate")
@@ -31,17 +31,13 @@ Dir.chdir('#{homedir}') do
   system('bundle exec foreman export systemd -a #{name} -u #{username} -p #{port} /usr/lib/systemd/system')
   main_target = File.read("/usr/lib/systemd/system/#{name}.target")
   main_target.gsub! 'StopWhenUnneeded=true', 'StopWhenUnneeded=false'
-  File.open("/usr/lib/systemd/system/#{name}.target", "w") { |file| file.puts main_target }
+  File.open('/usr/lib/systemd/system/#{name}.target', 'w') { |file| file.puts main_target }
 
-  unless File.exist?('#{configdir}/secrets.yml')
-    secret = `bundle exec rake secret`
-
-    secrets = File.read('#{configdir}/secrets.yml')
-    secrets.gsub! '<%= ENV["SECRET_KEY_BASE"] %>', secret
-    File.open('#{configdir}/secrets.yml', "w") { |file| file.puts secrets }
-  end
+  secret = `bundle exec rake secret`
+  secrets = File.read('#{configdir}/secrets.yml')
+  secrets.gsub! '<%= ENV["SECRET_KEY_BASE"] %>', secret
+  File.open('#{configdir}/secrets.yml', 'w') { |file| file.puts secrets }
 end
-
   __SCRIPT
     end
   end
