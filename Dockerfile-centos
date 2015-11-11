@@ -1,0 +1,38 @@
+FROM centos:7
+MAINTAINER Mezuro Team <mezurometrics@gmail.com>
+
+RUN sed -i 's/keepcache=0/keepcache=1/' /etc/yum.conf
+
+RUN yum -y install epel-release
+RUN yum -y upgrade
+RUN yum -y install \
+  rpmdevtools \
+  createrepo \
+  rsync \
+  make \
+  automake \
+  gcc \
+  gcc-c++ \
+  ruby \
+  rubygem-bundler \
+  ruby-devel \
+  git \
+  curl \
+  libpqxx-devel \
+  libevent-devel \
+  openssl-devel \
+  libxml2-devel \
+  libxslt-devel \
+  readline-devel \
+  sqlite-devel \
+  postgresql \
+  postgresql-devel \
+  postgresql-server \
+  redhat-rpm-config
+
+RUN gem install fpm-cookery --no-ri --no-rdoc
+RUN gem install bundler thor --no-ri --no-rdoc
+
+ADD scripts /root/mezuro/scripts
+
+CMD ["/root/mezuro/scripts/kalibro_configurations/run.sh"]

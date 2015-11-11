@@ -19,7 +19,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
   case platform
   when :centos
     then
-    depends 'postgresql', 'ruby', 'rubygem-bundler', 'sqlite-devel', 'postgresql-devel'
+    depends 'postgresql', 'postgresql-server', 'ruby', 'rubygem-bundler', 'sqlite-devel', 'postgresql-devel', 'redhat-rpm-config'
   when :debian
     then
     depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-9.4'
