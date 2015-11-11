@@ -16,7 +16,14 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
   config_files '/etc/mezuro/kalibro-configurations/database.yml', '/etc/mezuro/kalibro-configurations/secrets.yml'
 
-  depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-9.4'
+  case platform
+  when :centos
+    then
+    depends 'postgresql', 'ruby', 'rubygem-bundler', 'sqlite-devel', 'postgresql-devel'
+  when :debian
+    then
+    depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-9.4'
+  end
 
   post_install "post_install.rb"
 
