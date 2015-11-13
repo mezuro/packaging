@@ -26,7 +26,7 @@ if ! [ sudo -u postgres psql -lqt | cut -d \\| -f 1 | grep -w #{username}_produc
   sudo -u #{username} RAILS_ENV=production bundle exec rake db:setup
 else
   sudo -u #{username} RAILS_ENV=production bundle exec rake db:migrate
-end
+fi
 
 # Create systemd scripts
 bundle exec foreman export systemd -a #{name} -u #{username} -p #{port} /usr/lib/systemd/system
