@@ -22,7 +22,7 @@ cd #{homedir}
 bundle install --deployment --without development:test
 
 # Setup database
-if ! [ sudo -u postgres psql -lqt | cut -d \\| -f 1 | grep -w #{username}_production ]; then
+if ! [ `sudo -u postgres psql -lqt | cut -d \\| -f 1 | grep -w #{username}_production` ]; then
   sudo -u #{username} RAILS_ENV=production bundle exec rake db:setup
 else
   sudo -u #{username} RAILS_ENV=production bundle exec rake db:migrate
