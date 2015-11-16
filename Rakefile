@@ -24,17 +24,17 @@ end
 
 namespace :centos do
   desc 'Build the whole Mezuro packages for CentOS'
-  task :all => [:container, :kalibro_configurations, :kalibro_processor] do
+  task :all => [:container] do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build"
   end
 
   desc 'Build the KalibroConfigurations package for CentOS'
-  task :kalibro_configurations do
+  task :kalibro_configurations => [:container] do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/kalibro_configurations/run.sh"
   end
 
   desc 'Build the KalibroProcessor package for CentOS'
-  task :kalibro_processor do
+  task :kalibro_processor => [:container] do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/kalibro_processor/run.sh"
   end
 
