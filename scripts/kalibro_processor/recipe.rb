@@ -9,7 +9,7 @@ class KalibroProcessor < FPM::Cookery::Recipe
 
   maintainer  'Mezuro Team <mezurometrics@gmail.com>'
   license     'AGPLv3'
-  description 'Web service for managing code analysis configurations'
+  description 'Web service for static source code analysis'
   arch        'all'
 
   revision '1'
@@ -33,7 +33,7 @@ class KalibroProcessor < FPM::Cookery::Recipe
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
-    generate_post_install("#{File.dirname(__FILE__)}/post_install.rb", 'kalibro-processor', 8083)
+    generate_post_install("#{File.dirname(__FILE__)}/post_install.rb", 'kalibro-processor', 8082)
 
     safesystem("bundle package --all --all-platforms")
   end
