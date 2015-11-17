@@ -2,8 +2,7 @@ task default: %w[centos:all debian:all]
 
 namespace :debian do
   desc 'Build the whole Mezuro packages for Debian'
-  task :all => [:container] do
-    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-debian-build"
+  task :all => [:kalibro_configurations, :kalibro_processor, :prezento] do
   end
 
   desc 'Build the KalibroConfigurations package for Debian'
@@ -16,6 +15,11 @@ namespace :debian do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-debian-build bash /root/mezuro/scripts/kalibro_processor/run.sh"
   end
 
+  desc 'Build the Prezento package for Debian'
+  task :prezento => [:container] do
+    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-debian-build bash /root/mezuro/scripts/prezento/run.sh"
+  end
+
   desc 'Build the whole Docker containerfor Debian'
   task :container => [:mk_structure] do
     sh 'docker build --rm=true --tag mezuro-debian-build -f Dockerfile-debian .'
@@ -24,8 +28,7 @@ end
 
 namespace :centos do
   desc 'Build the whole Mezuro packages for CentOS'
-  task :all => [:container] do
-    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build"
+  task :all => [:kalibro_configurations, :kalibro_processor, :prezento] do
   end
 
   desc 'Build the KalibroConfigurations package for CentOS'
@@ -38,6 +41,11 @@ namespace :centos do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/kalibro_processor/run.sh"
   end
 
+  desc 'Build the Prezento package for CentOS'
+  task :prezento => [:container] do
+    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento/run.sh"
+  end
+
   desc 'Build the whole Docker containerfor CentOS'
   task :container => [:mk_structure] do
     sh 'docker build --rm=true --tag mezuro-centos-build -f Dockerfile-centos .'
@@ -48,6 +56,7 @@ desc 'Create build dirs'
 task :mk_structure do
   sh "mkdir -p pkgs/kalibro_configurations"
   sh "mkdir -p pkgs/kalibro_processor"
+  sh "mkdir -p pkgs/prezento"
 end
 
 desc 'Undo mk_structure'

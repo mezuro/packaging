@@ -28,4 +28,4 @@ RUN gem install bundler thor --no-ri --no-rdoc
 
 ADD scripts /root/mezuro/scripts
 
-CMD ["/root/mezuro/scripts/run_all.sh"]
+CMD ["/bin/bash"]
