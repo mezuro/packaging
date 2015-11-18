@@ -56,26 +56,41 @@ end
 
 namespace :centos do
   desc 'Build the whole Mezuro packages for CentOS'
-  task :all => [:kalibro_configurations, :kalibro_processor, :prezento] do
+  task :all => :prezento do
   end
 
+  kalibro_configurations_rpm = rpm_path('kalibro-configurations', MezuroVersions::KALIBRO_CONFIGURATIONS)
+  kalibro_processor_rpm = rpm_path('kalibro-processor', MezuroVersions::KALIBRO_PROCESSOR)
+  prezento_rpm = rpm_path('prezento', MezuroVersions::PREZENTO)
+
   desc 'Build the KalibroConfigurations package for CentOS'
-  task :kalibro_configurations => [:container] do
+  task :kalibro_configurations => [:container, kalibro_configurations_rpm]
+
+  file kalibro_configurations_rpm => ['scripts/kalibro_configurations/recipe.rb',
+                                      'pkgs/kalibro-configurations'] do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/kalibro_configurations/run.sh"
   end
 
   desc 'Build the KalibroProcessor package for CentOS'
-  task :kalibro_processor => [:container] do
+  task :kalibro_processor => [:container, kalibro_processor_rpm]
+
+  file kalibro_processor_rpm => ['scripts/kalibro_processor/recipe.rb',
+                                 'pkgs/kalibro-processor'] do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/kalibro_processor/run.sh"
   end
 
   desc 'Build the Prezento package for CentOS'
-  task :prezento => [:container] do
-    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento/run.sh"
+  task :prezento => [:container, prezento_rpm]
+
+  file prezento_rpm => ['scripts/prezento/recipe.rb',
+                        kalibro_configurations_rpm,
+                        kalibro_processor_rpm,
+                        'pkgs/prezento'] do
+    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento/run.sh /root/mezuro/#{kalibro_configurations_rpm} /root/mezuro/#{kalibro_processor_rpm}"
   end
 
   desc 'Build the whole Docker containerfor CentOS'
-  task :container => [:mk_structure] do
+  task :container => ['Dockerfile-centos'] do
     sh 'docker build --rm=true --tag mezuro-centos-build -f Dockerfile-centos .'
   end
 end
