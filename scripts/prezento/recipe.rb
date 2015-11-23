@@ -25,7 +25,7 @@ class Prezento < FPM::Cookery::Recipe
     depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-9.4', 'kalibro-processor', 'kalibro-configurations'
   end
 
-  post_install "post_install.rb"
+  post_install "post_install.sh"
 
   def build
     inline_replace 'config/database.yml.postgresql_sample' do |s|
@@ -33,7 +33,7 @@ class Prezento < FPM::Cookery::Recipe
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
-    generate_post_install("#{File.dirname(__FILE__)}/post_install.rb", 'prezento', 8081)
+    generate_post_install("#{File.dirname(__FILE__)}/post_install.sh", 'prezento', 8081)
 
     safesystem("bundle package --all --all-platforms")
   end
