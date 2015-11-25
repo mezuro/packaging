@@ -17,11 +17,15 @@ class PackageManager
   end
 
   def package(repo, package_name)
-    response = RequestMaker.get("/repos/#{@username}/#{repo}/#{package_name}", @username, @key).body
-    JSON.parse(response) unless response.empty?
+    response = RequestMaker.get("/packages/#{@username}/#{repo}/#{package_name}", @username, @key).body
+    response.empty? ? nil : JSON.parse(response)
   end
 
   def create(repo, attributes)
-    RequestMaker.post("/repos/#{@username}/#{repo}", @username, @key, attributes)
+    RequestMaker.post("/packages/#{@username}/#{repo}", @username, @key, attributes)
+  end
+
+  def delete(repo, package_name)
+    RequestMaker.delete("/packages/#{@username}/#{repo}/#{package_name}", @username, @key)
   end
 end

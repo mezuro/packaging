@@ -13,7 +13,15 @@ class RequestMaker
   def self.post(action, username, key, parameters = {})
     uri = URI("#{BASE_URI}#{action}")
     request = Net::HTTP::Post.new uri
-    request.set_form_data parameters
+    request.add_field('Content-Type', 'application/json')
+    request.body = parameters.to_json
+    request.basic_auth username, key
+    Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
+  end
+
+  def self.delete(action, username, key)
+    uri = URI("#{BASE_URI}#{action}")
+    request = Net::HTTP::Delete.new uri
     request.basic_auth username, key
     Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
   end
