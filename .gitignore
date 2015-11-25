@@ -4,3 +4,4 @@ Gemfile.lock
 tmp-build/
 cache/
 tmp-dest/
+scripts/bintray/credentials.yml
