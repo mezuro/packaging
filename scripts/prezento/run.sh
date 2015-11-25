@@ -2,8 +2,6 @@
 
 set -ex
 
-# systemctl start postgresql
-
 if which yum >/dev/null 2>&1; then
   yum install -y "$@"
 elif which dpkg >/dev/null 2>&1; then
