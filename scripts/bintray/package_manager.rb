@@ -8,10 +8,6 @@ class PackageManager
     @username, @key = YAML.load_file('scripts/bintray/credentials.yml').values
   end
 
-  def repos
-    JSON.parse(RequestMaker.get("/repos/#{@username}", @username, @key).body)
-  end
-
   def packages(repo)
     JSON.parse(RequestMaker.get("/repos/#{@username}/#{repo}/packages", @username, @key).body)
   end
