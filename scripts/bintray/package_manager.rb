@@ -21,6 +21,10 @@ class PackageManager
     RequestMaker.post("/packages/#{@username}/#{repo}", @username, @key, attributes)
   end
 
+  def update(repo, attributes, package_name)
+    RequestMaker.patch("/packages/#{@username}/#{repo}/#{package_name}", @username, @key, attributes)
+  end
+
   def delete(repo, package_name)
     RequestMaker.delete("/packages/#{@username}/#{repo}/#{package_name}", @username, @key)
   end
