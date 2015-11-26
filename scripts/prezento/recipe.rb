@@ -1,7 +1,7 @@
-require_relative '../generate_post_install'
+require_relative '../generate_script'
 
 class Prezento < FPM::Cookery::Recipe
-  include GeneratePostInstall
+  include GenerateScript
 
   name     'prezento'
   version  '0.9.2'
@@ -33,7 +33,7 @@ class Prezento < FPM::Cookery::Recipe
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
-    generate_post_install("#{File.dirname(__FILE__)}/post_install.sh", 'prezento', 8081)
+    generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'prezento', 8081)
 
     safesystem("bundle package --all --all-platforms")
   end

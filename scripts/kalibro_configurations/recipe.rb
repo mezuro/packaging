@@ -1,7 +1,7 @@
-require_relative '../generate_post_install'
+require_relative '../generate_script'
 
 class KalibroConfigurations < FPM::Cookery::Recipe
-  include GeneratePostInstall
+  include GenerateScript
 
   name     'kalibro-configurations'
   version  '1.2.3'
@@ -33,7 +33,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
-    generate_post_install("#{File.dirname(__FILE__)}/post_install.sh", 'kalibro-configurations', 8083)
+    generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'kalibro-configurations', 8082)
 
     safesystem("bundle package --all --all-platforms")
   end

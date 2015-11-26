@@ -1,7 +1,7 @@
-require_relative '../generate_post_install'
+require_relative '../generate_script'
 
 class KalibroProcessor < FPM::Cookery::Recipe
-  include GeneratePostInstall
+  include GenerateScript
 
   name     'kalibro-processor'
   version  '1.1.3'
@@ -33,7 +33,7 @@ class KalibroProcessor < FPM::Cookery::Recipe
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
-    generate_post_install("#{File.dirname(__FILE__)}/post_install.sh", 'kalibro-processor', 8082)
+    generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'kalibro-processor', 8082)
 
     safesystem("bundle package --all --all-platforms")
   end
