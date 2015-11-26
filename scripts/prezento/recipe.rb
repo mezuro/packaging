@@ -34,6 +34,7 @@ class Prezento < FPM::Cookery::Recipe
     end
 
     generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'prezento', 8081)
+    generate_script(workdir("../admin.sh"), builddir("admin.sh"), 'prezento', nil)
 
     safesystem("bundle package --all --all-platforms")
   end
@@ -46,5 +47,6 @@ class Prezento < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/prezento/secrets.yml', 'config/secrets.yml'
     share('mezuro/prezento').install Dir['*']
     share('mezuro/prezento').install %w(.bundle .env)
+    bin('prezento-admin').install builddir('admin.sh')
   end
 end

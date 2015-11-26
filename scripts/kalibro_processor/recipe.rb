@@ -34,6 +34,7 @@ class KalibroProcessor < FPM::Cookery::Recipe
     end
 
     generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'kalibro-processor', 8082)
+    generate_script(workdir("../admin.sh"), builddir("admin.sh"), 'kalibro-processor', nil)
 
     safesystem("bundle package --all --all-platforms")
   end
@@ -48,5 +49,6 @@ class KalibroProcessor < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/kalibro-processor/repositories.yml', 'config/repositories.yml'
     share('mezuro/kalibro-processor').install Dir['*']
     share('mezuro/kalibro-processor').install %w(.bundle .env)
+    bin('kalibro-processor-admin').install builddir('admin.sh')
   end
 end
