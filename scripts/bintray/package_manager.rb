@@ -1,7 +1,3 @@
-require_relative 'request_maker.rb'
-require 'yaml'
-require 'json'
-
 class PackageManager
   def initialize(attributes = {})
     @attributes = attributes

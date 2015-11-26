@@ -1,7 +1,3 @@
-require_relative 'request_maker.rb'
-require 'yaml'
-require 'json'
-
 class ContentManager
   def initialize(attributes = {})
     @attributes = attributes
@@ -19,12 +15,9 @@ class ContentManager
                       deb_architecture=#{debian_info[:archs]}", @username, @key, attributes)
   end
 
-  def publish(repo, package, version)
-    RequestMaker.post("/content/#{@username}/#{repo}/#{package}/#{version}/publish", @username, @key)
-  end
-
-  def discard(repo, package, version)
-    RequestMaker.post("/content/#{@username}/#{repo}/#{package}/#{version}/publish?discard=1", @username, @key)
+  def publish(repo, package, version, discard = 0)
+    RequestMaker.post("/content/#{@username}/#{repo}/#{package}/#{version}/publish?discard=#{discard}", @username,
+                      @key)
   end
 
   def delete(repo, file_path)

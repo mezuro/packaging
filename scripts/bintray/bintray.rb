@@ -1,0 +1,6 @@
+require_relative 'content_manager.rb'
+require_relative 'package_manager.rb'
+require_relative 'version_manager.rb'
+require_relative 'request_maker.rb'
+require 'yaml'
+require 'json'
