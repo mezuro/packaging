@@ -5,14 +5,14 @@ class ContentManager
   end
 
   def upload(repo, package, version, file_path)
-    RequestMaker.put("/content/#{@username}/#{repo}/#{package}/#{version}/#{file_path}", @username, @key, attributes)
+    RequestMaker.put("/content/#{@username}/#{repo}/#{package}/#{version}/#{file_path}", @username, @key)
   end
 
   def debian_upload(repo, package, version, file_path, debian_info)
-    RequestMaker.put("/content/#{@username}/#{repo}/#{package}/#{version}/#{file_path};
-                      deb_distribution=#{debian_info[:distros]};
-                      deb_component=#{debian_info[:components]};
-                      deb_architecture=#{debian_info[:archs]}", @username, @key, attributes)
+    RequestMaker.put("/content/#{@username}/#{repo}/#{package}/#{version}/#{file_path};" \
+                      "deb_distribution=#{debian_info[:distros]};" \
+                      "deb_component=#{debian_info[:components]};" \
+                      "deb_architecture=#{debian_info[:archs]}", @username, @key)
   end
 
   def publish(repo, package, version, discard = 0)
