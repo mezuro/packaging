@@ -1,1 +1,4 @@
 pkgs/
+scripts/*/tmp-build/
+scripts/*/cache/
+scripts/*/tmp-dest/
