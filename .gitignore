@@ -1,3 +1,6 @@
 src
 pkgs
 Gemfile.lock
+tmp-build/
+cache/
+tmp-dest/
