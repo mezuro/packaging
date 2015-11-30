@@ -52,6 +52,19 @@ namespace :debian do
   task :container => ['Dockerfile-debian'] do
     sh 'docker build --rm=true --tag mezuro-debian-build -f Dockerfile-debian .'
   end
+
+  desc ''
+  task :publish_kalibro_configurations do |t, args|
+    require_relative 'scripts/bintray/bintray.rb'
+    data = MezuroInformations::KALIBRO_CONFIGURATIONS
+    version = "#{data.delete :version}-#{data.delete :release}"  # Bintray's API does not accept version or release in the parameters hash
+    PackageManager.new.create('deb', data)
+    VersionManager.new.create('deb', 'kalibro-configurations', { name: version, desc: data[:description] })
+    cm = ContentManager.new
+    cm.debian_upload('deb', 'kalibro-configurations', version, "kalibro-configurations/kalibro-configurations-#{version}",
+    {distros: 'Jessie', components: 'main', archs: 'all'}, kalibro_configurations_deb)
+    cm.publish('deb', 'kalibro-configurations', version)
+  end
 end
 
 namespace :centos do
