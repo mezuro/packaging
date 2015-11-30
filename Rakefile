@@ -1,4 +1,4 @@
-require_relative 'versions.rb'
+require_relative 'mezuro_informations.rb'
 
 task default: %w[centos:all debian:all]
 
@@ -18,9 +18,9 @@ namespace :debian do
   desc 'Build the whole Mezuro packages for Debian'
   task :all => [:prezento]
 
-  kalibro_configurations_deb = deb_path('kalibro-configurations', MezuroVersions::KALIBRO_CONFIGURATIONS)
-  kalibro_processor_deb = deb_path('kalibro-processor', MezuroVersions::KALIBRO_PROCESSOR)
-  prezento_deb = deb_path('prezento', MezuroVersions::PREZENTO)
+  kalibro_configurations_deb = deb_path('kalibro-configurations', MezuroInformations::KALIBRO_CONFIGURATIONS)
+  kalibro_processor_deb = deb_path('kalibro-processor', MezuroInformations::KALIBRO_PROCESSOR)
+  prezento_deb = deb_path('prezento', MezuroInformations::PREZENTO)
 
   desc 'Build the KalibroConfigurations package for Debian'
   task :kalibro_configurations => [:container, kalibro_configurations_deb]
@@ -59,9 +59,9 @@ namespace :centos do
   task :all => :prezento do
   end
 
-  kalibro_configurations_rpm = rpm_path('kalibro-configurations', MezuroVersions::KALIBRO_CONFIGURATIONS)
-  kalibro_processor_rpm = rpm_path('kalibro-processor', MezuroVersions::KALIBRO_PROCESSOR)
-  prezento_rpm = rpm_path('prezento', MezuroVersions::PREZENTO)
+  kalibro_configurations_rpm = rpm_path('kalibro-configurations', MezuroInformations::KALIBRO_CONFIGURATIONS)
+  kalibro_processor_rpm = rpm_path('kalibro-processor', MezuroInformations::KALIBRO_PROCESSOR)
+  prezento_rpm = rpm_path('prezento', MezuroInformations::PREZENTO)
 
   desc 'Build the KalibroConfigurations package for CentOS'
   task :kalibro_configurations => [:container, kalibro_configurations_rpm]
