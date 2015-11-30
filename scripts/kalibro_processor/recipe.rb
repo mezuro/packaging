@@ -1,7 +1,7 @@
-require_relative '../generate_post_install'
+require_relative '../generate_script'
 
 class KalibroProcessor < FPM::Cookery::Recipe
-  include GeneratePostInstall
+  include GenerateScript
 
   name     'kalibro-processor'
   version  '1.1.3'
@@ -33,7 +33,8 @@ class KalibroProcessor < FPM::Cookery::Recipe
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
-    generate_post_install("#{File.dirname(__FILE__)}/post_install.sh", 'kalibro-processor', 8082)
+    generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'kalibro-processor', 8082)
+    generate_script(workdir("../admin.sh"), builddir("admin.sh"), 'kalibro-processor', nil)
 
     safesystem("bundle package --all --all-platforms")
   end
@@ -48,5 +49,6 @@ class KalibroProcessor < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/kalibro-processor/repositories.yml', 'config/repositories.yml'
     share('mezuro/kalibro-processor').install Dir['*']
     share('mezuro/kalibro-processor').install %w(.bundle .env)
+    bin('kalibro-processor-admin').install builddir('admin.sh')
   end
 end
