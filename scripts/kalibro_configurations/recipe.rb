@@ -33,7 +33,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
       s.gsub! /^(\s*)password:(.*)/, ''
     end
 
-    generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'kalibro-configurations', 8082)
+    generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'kalibro-configurations', 8083)
     generate_script(workdir("../admin.sh"), builddir("admin.sh"), 'kalibro-configurations', nil)
 
     safesystem("bundle package --all --all-platforms")
