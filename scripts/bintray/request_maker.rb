@@ -19,9 +19,11 @@ class RequestMaker
     Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
   end
 
-  def self.put(action, username, key, parameters = {})
+  def self.put(action, username, key, file)
     uri = URI("#{BASE_URI}#{action}")
     request = Net::HTTP::Put.new uri
+    request.add_field('Content-Type', 'multipart/form-data')
+    request.body = file.read
     request.basic_auth username, key
     Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
   end
