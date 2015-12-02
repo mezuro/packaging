@@ -4,52 +4,46 @@ class RequestMaker
   BASE_URI = 'https://api.bintray.com'
 
   def self.get(action, username, key)
-    uri = URI("#{BASE_URI}#{action}")
-    request = Net::HTTP::Get.new uri
-    request.basic_auth username, key
-    make_request(uri, request)
+    make_request(build_request(action, Net::HTTP::Get, username, key))
   end
 
   def self.post(action, username, key, parameters = {})
-    uri = URI("#{BASE_URI}#{action}")
-    request = Net::HTTP::Post.new uri
-    request.add_field('Content-Type', 'application/json')
-    request.body = parameters.to_json
-    request.basic_auth username, key
-    make_request(uri, request)
+    header_fields = {'Content-Type' => 'application/json'}
+    request = build_request(action, Net::HTTP::Post, username, key, header_fields, parameters.to_json)
+    make_request(request)
   end
 
   def self.put(action, username, key, file)
-    uri = URI("#{BASE_URI}#{action}")
-    request = Net::HTTP::Put.new uri
-    request.add_field('Content-Type', 'multipart/form-data')
-    request.body = file.read
-    request.basic_auth username, key
-    make_request(uri, request)
+    header_fields = {'Content-Type' => 'multipart/form-data'}
+    request = build_request(action, Net::HTTP::Put, username, key, header_fields, file.read)
+    make_request(request)
   end
 
   def self.delete(action, username, key)
-    uri = URI("#{BASE_URI}#{action}")
-    request = Net::HTTP::Delete.new uri
-    request.basic_auth username, key
-    make_request(uri, request)
+    make_request(build_request(action, Net::HTTP::Delete, username, key))
   end
 
   def self.patch(action, username, key, parameters = {})
-    uri = URI("#{BASE_URI}#{action}")
-    request = Net::HTTP::Patch.new uri
-    request.add_field('Content-Type', 'application/json')
-    request.body = parameters.to_json
-    request.basic_auth username, key
-    make_request(uri, request)
+    header_fields = {'Content-Type' => 'application/json'}
+    request = build_request(action, Net::HTTP::Patch, username, key, header_fields, parameters.to_json)
+    make_request(request)
   end
 
   private
 
-  def self.make_request(uri, request)
-    http = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https')
+  def self.make_request(request)
+    http = Net::HTTP.start(request.uri.hostname, request.uri.port, use_ssl: request.uri.scheme == 'https')
     response = http.request(request)
     http.finish
     response
+  end
+
+  def self.build_request(action, http_verb, username, key, fields={}, body=nil)
+    uri = URI("#{BASE_URI}#{action}")
+    request = http_verb.new uri
+    request.basic_auth username, key
+    fields.each { |header, value| request.add_field(header, value) }
+    request.body = body unless body.nil?
+    request
   end
 end
