@@ -7,7 +7,7 @@ class RequestMaker
     uri = URI("#{BASE_URI}#{action}")
     request = Net::HTTP::Get.new uri
     request.basic_auth username, key
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
+    make_request(uri, request)
   end
 
   def self.post(action, username, key, parameters = {})
@@ -16,7 +16,7 @@ class RequestMaker
     request.add_field('Content-Type', 'application/json')
     request.body = parameters.to_json
     request.basic_auth username, key
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
+    make_request(uri, request)
   end
 
   def self.put(action, username, key, file)
@@ -25,14 +25,14 @@ class RequestMaker
     request.add_field('Content-Type', 'multipart/form-data')
     request.body = file.read
     request.basic_auth username, key
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
+    make_request(uri, request)
   end
 
   def self.delete(action, username, key)
     uri = URI("#{BASE_URI}#{action}")
     request = Net::HTTP::Delete.new uri
     request.basic_auth username, key
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
+    make_request(uri, request)
   end
 
   def self.patch(action, username, key, parameters = {})
@@ -41,6 +41,15 @@ class RequestMaker
     request.add_field('Content-Type', 'application/json')
     request.body = parameters.to_json
     request.basic_auth username, key
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
+    make_request(uri, request)
+  end
+
+  private
+
+  def self.make_request(uri, request)
+    http = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https')
+    response = http.request(request)
+    http.finish
+    response
   end
 end
