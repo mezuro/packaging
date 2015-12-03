@@ -11,6 +11,32 @@ def rpm_path(pkg, info)
   "pkgs/#{pkg}/#{pkg}-#{info[:version]}-#{info[:release]}.noarch.rpm"
 end
 
+def publish_package(type, package)
+  puts ">> Starting to publish #{package} package on BinTray"
+  underscored_package = package.gsub('-', '_')
+  data = Kernel.const_get("MezuroInformations::#{underscored_package.upcase}")[:data]
+  info = Kernel.const_get("MezuroInformations::#{underscored_package.upcase}")[:info]
+  version = "#{info[:version]}-#{info[:release]}"
+  path = send("#{type}_path", package, info)
+
+  puts ">> Creating package"
+  PackageManager.create(type, data)
+
+  puts ">> Creating version #{version}"
+  VersionManager.create(type, package, { name: version, desc: data[:description] })
+
+  puts ">> Uploading package on #{path}"
+  if type == 'deb'
+    ContentManager.debian_upload(type, package, version, "#{package}/#{package}-#{version}",
+    {distros: 'Jessie', components: 'main', archs: 'all'}, path)
+  else
+    ContentManager.upload(type, package, version, "#{package}/#{package}-#{version}", path)
+  end
+
+  puts ">> Publishing"
+  ContentManager.publish(type, package, version)
+end
+
 directory 'pkgs/kalibro-configurations'
 directory 'pkgs/kalibro-processor'
 directory 'pkgs/prezento'
@@ -56,19 +82,7 @@ namespace :debian do
 
   desc 'Publishes a package on BinTray'
   task :publish, [:package] do |t, args|
-    puts ">> Starting to publish #{args[:package]} package on BinTray"
-    underscored_package = args[:package].gsub('-', '_')
-    data = Kernel.const_get("MezuroInformations::#{underscored_package.upcase}")
-    version = "#{data.delete :version}-#{data.delete :release}"  # Bintray's API does not accept version or release in the parameters hash
-    puts ">> Creating package"
-    PackageManager.create('deb', data)
-    puts ">> Creating version #{version}"
-    VersionManager.create('deb', args[:package], { name: version, desc: data[:description] })
-    puts ">> Uploading package on #{eval('%{path}_deb' %{path: underscored_package})}"
-    ContentManager.debian_upload('deb', args[:package], version, "#{args[:package]}/#{args[:package]}-#{version}",
-    {distros: 'Jessie', components: 'main', archs: 'all'}, eval("#{underscored_package}_deb"))
-    puts ">> Publishing"
-    ContentManager.publish('deb', args[:package], version)
+    publish_package('deb', args[:package])
   end
 end
 
@@ -114,18 +128,7 @@ namespace :centos do
 
   desc 'Publishes a package on BinTray'
   task :publish, [:package] do |t, args|
-    puts ">> Starting to publish #{args[:package]} package on BinTray"
-    underscored_package = args[:package].gsub('-', '_')
-    data = Kernel.const_get("MezuroInformations::#{underscored_package.upcase}")
-    version = "#{data.delete :version}-#{data.delete :release}"  # Bintray's API does not accept version or release in the parameters hash
-    puts ">> Creating package"
-    PackageManager.create('rpm', data)
-    puts ">> Creating version #{version}"
-    VersionManager.create('rpm', args[:package], { name: version, desc: data[:description] })
-    puts ">> Uploading package on #{eval('%{path}_rpm' %{path: underscored_package})}"
-    ContentManager.upload('rpm', args[:package], version, "#{args[:package]}/#{args[:package]}-#{version}", eval("#{underscored_package}_rpm"))
-    puts ">> Publishing"
-    ContentManager.publish('rpm', args[:package], version)
+    publish_package('rpm', args[:package])
   end
 end
 
