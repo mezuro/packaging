@@ -1,6 +1,9 @@
 class ContentManager
-  def self.upload(repo, package, version, file_path)
-    RequestMaker.put("/content/:user/#{repo}/#{package}/#{version}/#{file_path}")
+  def self.upload(repo, package, version, file_path, file)
+    file_bin = File.open(file, 'rb')
+    response = RequestMaker.put("/content/:user/#{repo}/#{package}/#{version}/#{file_path}", file_bin)
+    file_bin.close
+    response
   end
 
   def self.debian_upload(repo, package, version, file_path, debian_info, file)

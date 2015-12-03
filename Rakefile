@@ -111,6 +111,22 @@ namespace :centos do
   task :container => ['Dockerfile-centos'] do
     sh 'docker build --rm=true --tag mezuro-centos-build -f Dockerfile-centos .'
   end
+
+  desc 'Publishes a package on BinTray'
+  task :publish, [:package] do |t, args|
+    puts ">> Starting to publish #{args[:package]} package on BinTray"
+    underscored_package = args[:package].gsub('-', '_')
+    data = Kernel.const_get("MezuroInformations::#{underscored_package.upcase}")
+    version = "#{data.delete :version}-#{data.delete :release}"  # Bintray's API does not accept version or release in the parameters hash
+    puts ">> Creating package"
+    PackageManager.create('rpm', data)
+    puts ">> Creating version #{version}"
+    VersionManager.create('rpm', args[:package], { name: version, desc: data[:description] })
+    puts ">> Uploading package on #{eval('%{path}_rpm' %{path: underscored_package})}"
+    ContentManager.upload('rpm', args[:package], version, "#{args[:package]}/#{args[:package]}-#{version}", eval("#{underscored_package}_rpm"))
+    puts ">> Publishing"
+    ContentManager.publish('rpm', args[:package], version)
+  end
 end
 
 desc 'Undo mk_structure'
