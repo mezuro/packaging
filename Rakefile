@@ -53,17 +53,23 @@ namespace :debian do
     sh 'docker build --rm=true --tag mezuro-debian-build -f Dockerfile-debian .'
   end
 
-  desc ''
-  task :publish_kalibro_configurations do |t, args|
+  desc 'Publishes a package on BinTray'
+  task :publish, [:package] do |t, args|
     require_relative 'scripts/bintray/bintray.rb'
-    data = MezuroInformations::KALIBRO_CONFIGURATIONS
+    puts ">> Starting to publish #{args[:package]} package on BinTray"
+    underscored_package = args[:package].gsub('-', '_')
+    data = Kernel.const_get("MezuroInformations::#{underscored_package.upcase}")
     version = "#{data.delete :version}-#{data.delete :release}"  # Bintray's API does not accept version or release in the parameters hash
+    puts ">> Creating package"
     PackageManager.new.create('deb', data)
-    VersionManager.new.create('deb', 'kalibro-configurations', { name: version, desc: data[:description] })
+    puts ">> Creating version #{version}"
+    VersionManager.new.create('deb', args[:package], { name: version, desc: data[:description] })
     cm = ContentManager.new
-    cm.debian_upload('deb', 'kalibro-configurations', version, "kalibro-configurations/kalibro-configurations-#{version}",
-    {distros: 'Jessie', components: 'main', archs: 'all'}, kalibro_configurations_deb)
-    cm.publish('deb', 'kalibro-configurations', version)
+    puts ">> Uploading package on #{eval('%{path}_deb' %{path: underscored_package})}"
+    cm.debian_upload('deb', args[:package], version, "#{args[:package]}/#{args[:package]}-#{version}",
+    {distros: 'Jessie', components: 'main', archs: 'all'}, eval("#{underscored_package}_deb"))
+    puts ">> Publishing"
+    cm.publish('deb', args[:package], version)
   end
 end
 
