@@ -61,15 +61,14 @@ namespace :debian do
     data = Kernel.const_get("MezuroInformations::#{underscored_package.upcase}")
     version = "#{data.delete :version}-#{data.delete :release}"  # Bintray's API does not accept version or release in the parameters hash
     puts ">> Creating package"
-    PackageManager.new.create('deb', data)
+    PackageManager.create('deb', data)
     puts ">> Creating version #{version}"
-    VersionManager.new.create('deb', args[:package], { name: version, desc: data[:description] })
-    cm = ContentManager.new
+    VersionManager.create('deb', args[:package], { name: version, desc: data[:description] })
     puts ">> Uploading package on #{eval('%{path}_deb' %{path: underscored_package})}"
-    cm.debian_upload('deb', args[:package], version, "#{args[:package]}/#{args[:package]}-#{version}",
+    ContentManager.debian_upload('deb', args[:package], version, "#{args[:package]}/#{args[:package]}-#{version}",
     {distros: 'Jessie', components: 'main', archs: 'all'}, eval("#{underscored_package}_deb"))
     puts ">> Publishing"
-    cm.publish('deb', args[:package], version)
+    ContentManager.publish('deb', args[:package], version)
   end
 end
 

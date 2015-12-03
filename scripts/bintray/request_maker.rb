@@ -48,10 +48,10 @@ class RequestMaker
   end
 
   def self.username
-    @@username ||= YAML.load_file('scripts/bintray/credentials.yml')[:username]
+    @@username ||= YAML.load_file('scripts/bintray/credentials.yml')['username']
   end
 
   def self.key
-    @@key ||= YAML.load_file('scripts/bintray/credentials.yml')[:key]
+    @@key ||= YAML.load_file('scripts/bintray/credentials.yml')['key']
   end
 end
