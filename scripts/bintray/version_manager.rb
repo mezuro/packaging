@@ -1,28 +1,23 @@
 class VersionManager
-  def initialize(attributes = {})
-    @attributes = attributes
-    @username, @key = YAML.load_file('scripts/bintray/credentials.yml').values
-  end
-
   def version(repo, package, version)
-    response = RequestMaker.get("/packages/#{@username}/#{repo}/#{package}/versions/#{version}", @username, @key).body
+    response = RequestMaker.get("/packages/:user/#{repo}/#{package}/versions/#{version}").body
     response.empty? ? nil : JSON.parse(response)
   end
 
   def latest_version(repo, package)
-    response = RequestMaker.get("/packages/#{@username}/#{repo}/#{package}/versions/_latest", @username, @key).body
+    response = RequestMaker.get("/packages/:user/#{repo}/#{package}/versions/_latest").body
     response.empty? ? nil : JSON.parse(response)
   end
 
   def create(repo, package, attributes)
-    RequestMaker.post("/packages/#{@username}/#{repo}/#{package}/versions", @username, @key, attributes)
+    RequestMaker.post("/packages/:user/#{repo}/#{package}/versions", attributes)
   end
 
   def update(repo, attributes, package, version)
-    RequestMaker.patch("/packages/#{@username}/#{repo}/#{package}/versions/#{version}", @username, @key, attributes)
+    RequestMaker.patch("/packages/:user/#{repo}/#{package}/versions/#{version}", attributes)
   end
 
   def delete(repo, package, version)
-    RequestMaker.delete("/packages/#{@username}/#{repo}/#{package}/versions/#{version}", @username, @key)
+    RequestMaker.delete("/packages/:user/#{repo}/#{package}/versions/#{version}")
   end
 end

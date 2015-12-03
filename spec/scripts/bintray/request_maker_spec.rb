@@ -15,13 +15,15 @@ RSpec.describe RequestMaker do
     http_start.expects(:request).with(request)
     Net::HTTP.expects(:start).returns(http_start)
     request.expects(:uri).times(3).returns(uri)
+    RequestMaker.expects(:username).twice.returns(username)
+    RequestMaker.expects(:key).returns(key)
   end
 
   it 'makes a get request' do
     Net::HTTP::Get.expects(:new).returns(request)
     request.expects(:basic_auth).with(username, key)
 
-    described_class.get(action, username, key)
+    described_class.get(action)
   end
 
   it 'makes a post request' do
@@ -32,7 +34,7 @@ RSpec.describe RequestMaker do
     request.expects(:add_field).with('Content-Type', 'application/json')
     request.expects(:body=).with(parameters.to_json)
 
-    described_class.post(action, username, key, parameters)
+    described_class.post(action, parameters)
   end
 
   it 'makes a put request' do
@@ -44,14 +46,14 @@ RSpec.describe RequestMaker do
     request.expects(:add_field).with('Content-Type', 'multipart/form-data')
     request.expects(:body=)
 
-    described_class.put(action, username, key, file)
+    described_class.put(action, file)
   end
 
   it 'makes a delete request' do
     Net::HTTP::Delete.expects(:new).returns(request)
     request.expects(:basic_auth).with(username, key)
 
-    described_class.delete(action, username, key)
+    described_class.delete(action)
   end
 
   it 'makes a patch request' do
@@ -62,6 +64,6 @@ RSpec.describe RequestMaker do
     request.expects(:add_field).with('Content-Type', 'application/json')
     request.expects(:body=).with(parameters.to_json)
 
-    described_class.patch(action, username, key, parameters)
+    described_class.patch(action, parameters)
   end
 end

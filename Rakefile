@@ -1,4 +1,5 @@
 require_relative 'mezuro_informations.rb'
+require_relative 'scripts/bintray/bintray.rb'
 
 task default: %w[centos:all debian:all]
 
@@ -55,7 +56,6 @@ namespace :debian do
 
   desc 'Publishes a package on BinTray'
   task :publish, [:package] do |t, args|
-    require_relative 'scripts/bintray/bintray.rb'
     puts ">> Starting to publish #{args[:package]} package on BinTray"
     underscored_package = args[:package].gsub('-', '_')
     data = Kernel.const_get("MezuroInformations::#{underscored_package.upcase}")
