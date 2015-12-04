@@ -19,11 +19,12 @@ module Helpers
         ContentManager.debian_upload(type, package, version, "#{package}/#{package}-#{version}",
         {distros: 'Jessie', components: 'main', archs: 'all'}, path)
       else
-        ContentManager.upload(type, package, version, "#{package}/#{package}-#{version}", path)
+        ContentManager.upload(type, package, version, "#{package}-#{version}", path)
       end
 
       puts ">> Publishing"
       ContentManager.publish(type, package, version)
+      ContentManager.calc_metadata(type)
     end
   end
 end

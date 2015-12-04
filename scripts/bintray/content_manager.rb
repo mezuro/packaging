@@ -23,4 +23,8 @@ class ContentManager
   def self.delete(repo, file_path)
     RequestMaker.delete("/content/:user/#{repo}/#{file_path}")
   end
+
+  def self.calc_metadata(repo)
+    RequestMaker.post("/calc_metadata/:user/#{repo}")
+  end
 end
