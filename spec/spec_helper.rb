@@ -27,7 +27,8 @@ SimpleCov.start do
   coverage_dir 'coverage/rspec'
 end
 
-require_relative '../scripts/bintray/bintray.rb'
+require_relative '../scripts/bintray/bintray'
+require_relative '../helpers'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
