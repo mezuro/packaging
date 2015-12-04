@@ -1,14 +1,14 @@
-require_relative 'versions.rb'
+require "rspec/core/rake_task"
+
+require_relative 'mezuro_informations.rb'
+require_relative 'scripts/bintray/bintray.rb'
+require_relative 'helpers'
+
+include Helpers
 
 task default: %w[centos:all debian:all]
 
-def deb_path(pkg, info)
-  "pkgs/#{pkg}/#{pkg}_#{info[:version]}-#{info[:release]}_all.deb"
-end
-
-def rpm_path(pkg, info)
-  "pkgs/#{pkg}/#{pkg}-#{info[:version]}-#{info[:release]}.noarch.rpm"
-end
+RSpec::Core::RakeTask.new(:spec)
 
 directory 'pkgs/kalibro-configurations'
 directory 'pkgs/kalibro-processor'
@@ -18,9 +18,9 @@ namespace :debian do
   desc 'Build the whole Mezuro packages for Debian'
   task :all => [:prezento]
 
-  kalibro_configurations_deb = deb_path('kalibro-configurations', MezuroVersions::KALIBRO_CONFIGURATIONS)
-  kalibro_processor_deb = deb_path('kalibro-processor', MezuroVersions::KALIBRO_PROCESSOR)
-  prezento_deb = deb_path('prezento', MezuroVersions::PREZENTO)
+  kalibro_configurations_deb = deb_path('kalibro-configurations', MezuroInformations::KALIBRO_CONFIGURATIONS)
+  kalibro_processor_deb = deb_path('kalibro-processor', MezuroInformations::KALIBRO_PROCESSOR)
+  prezento_deb = deb_path('prezento', MezuroInformations::PREZENTO)
 
   desc 'Build the KalibroConfigurations package for Debian'
   task :kalibro_configurations => [:container, kalibro_configurations_deb]
@@ -52,6 +52,11 @@ namespace :debian do
   task :container => ['Dockerfile-debian'] do
     sh 'docker build --rm=true --tag mezuro-debian-build -f Dockerfile-debian .'
   end
+
+  desc 'Publishes a package on BinTray'
+  task :publish, [:package] do |t, args|
+    publish_package('deb', args[:package])
+  end
 end
 
 namespace :centos do
@@ -59,9 +64,9 @@ namespace :centos do
   task :all => :prezento do
   end
 
-  kalibro_configurations_rpm = rpm_path('kalibro-configurations', MezuroVersions::KALIBRO_CONFIGURATIONS)
-  kalibro_processor_rpm = rpm_path('kalibro-processor', MezuroVersions::KALIBRO_PROCESSOR)
-  prezento_rpm = rpm_path('prezento', MezuroVersions::PREZENTO)
+  kalibro_configurations_rpm = rpm_path('kalibro-configurations', MezuroInformations::KALIBRO_CONFIGURATIONS)
+  kalibro_processor_rpm = rpm_path('kalibro-processor', MezuroInformations::KALIBRO_PROCESSOR)
+  prezento_rpm = rpm_path('prezento', MezuroInformations::PREZENTO)
 
   desc 'Build the KalibroConfigurations package for CentOS'
   task :kalibro_configurations => [:container, kalibro_configurations_rpm]
@@ -92,6 +97,11 @@ namespace :centos do
   desc 'Build the whole Docker containerfor CentOS'
   task :container => ['Dockerfile-centos'] do
     sh 'docker build --rm=true --tag mezuro-centos-build -f Dockerfile-centos .'
+  end
+
+  desc 'Publishes a package on BinTray'
+  task :publish, [:package] do |t, args|
+    publish_package('rpm', args[:package])
   end
 end
 
