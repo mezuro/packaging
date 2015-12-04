@@ -3,13 +3,13 @@ require_relative '../generate_script'
 class KalibroProcessor < FPM::Cookery::Recipe
   include GenerateScript
 
-  name     'kalibro-processor'
-  version  '1.1.3'
-  source   'https://github.com/mezuro/kalibro_processor.git', :with => :git, :tag => "v#{version}"
+  name     MezuroInformations::KALIBRO_PROCESSOR[:data][:name]
+  version  MezuroInformations::KALIBRO_PROCESSOR[:info][:version]
+  source   MezuroInformations::KALIBRO_PROCESSOR[:data][:vcs_url], :with => :git, :tag => "v#{version}"
 
   maintainer  'Mezuro Team <mezurometrics@gmail.com>'
-  license     'AGPLv3'
-  description 'Web service for static source code analysis'
+  license     MezuroInformations::KALIBRO_PROCESSOR[:data][:licenses][0]
+  description MezuroInformations::KALIBRO_PROCESSOR[:data][:desc]
   arch        'all'
 
   revision '1'

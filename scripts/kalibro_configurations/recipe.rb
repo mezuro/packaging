@@ -3,13 +3,13 @@ require_relative '../generate_script'
 class KalibroConfigurations < FPM::Cookery::Recipe
   include GenerateScript
 
-  name     'kalibro-configurations'
-  version  '1.2.3'
-  source   'https://github.com/mezuro/kalibro_configurations.git', :with => :git, :tag => "v#{version}"
+  name     MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:name]
+  version  MezuroInformations::KALIBRO_CONFIGURATIONS[:info][:version]
+  source   MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:vcs_url], :with => :git, :tag => "v#{version}"
 
   maintainer  'Mezuro Team <mezurometrics@gmail.com>'
-  license     'AGPLv3'
-  description 'Web service for managing code analysis configurations'
+  license     MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:licenses][0]
+  description MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:desc]
   arch        'all'
 
   revision '1'
