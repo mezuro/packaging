@@ -1,4 +1,5 @@
 require_relative '../generate_script'
+require_relative '../../mezuro_informations'
 
 class KalibroProcessor < FPM::Cookery::Recipe
   include GenerateScript

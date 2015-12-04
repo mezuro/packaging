@@ -34,5 +34,6 @@ RUN gem install fpm-cookery --no-ri --no-rdoc
 RUN gem install bundler thor --no-ri --no-rdoc
 
 ADD scripts /root/mezuro/scripts
+ADD mezuro_informations.rb /root/mezuro/mezuro_informations.rb
 
 CMD ["/bin/bash"]
