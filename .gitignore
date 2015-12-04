@@ -6,3 +6,4 @@ cache/
 tmp-dest/
 scripts/bintray/credentials.yml
 spec/examples.txt
+coverage/

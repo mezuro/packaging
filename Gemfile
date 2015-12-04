@@ -5,3 +5,5 @@ gem "rake"
 gem 'rspec'
 
 gem 'mocha'
+
+gem 'simplecov'

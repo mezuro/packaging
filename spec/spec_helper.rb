@@ -17,6 +17,16 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'mocha/api'
+
+# Test coverage report
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter "/spec/"
+
+  coverage_dir 'coverage/rspec'
+end
+
 require_relative '../scripts/bintray/bintray.rb'
 
 RSpec.configure do |config|
