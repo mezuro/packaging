@@ -1,7 +1,11 @@
+require "rspec/core/rake_task"
+
 require_relative 'mezuro_informations.rb'
 require_relative 'scripts/bintray/bintray.rb'
 
 task default: %w[centos:all debian:all]
+
+RSpec::Core::RakeTask.new(:spec)
 
 def deb_path(pkg, info)
   "pkgs/#{pkg}/#{pkg}_#{info[:version]}-#{info[:release]}_all.deb"
