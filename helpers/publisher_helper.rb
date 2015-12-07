@@ -19,7 +19,7 @@ module Helpers
         ContentManager.debian_upload(type, package, version, "#{package}-#{version}_all.deb",
         {distros: 'jessie', components: 'main', archs: 'all'}, path)
       else
-        ContentManager.upload(type, package, version, "#{package}-#{version}", path)
+        ContentManager.upload(type, package, version, "#{package}-#{version}.noarch.rpm", path)
       end
     end
   end
