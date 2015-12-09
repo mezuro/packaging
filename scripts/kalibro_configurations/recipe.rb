@@ -48,6 +48,6 @@ class KalibroConfigurations < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/kalibro-configurations/secrets.yml', 'config/secrets.yml'
     share('mezuro/kalibro-configurations').install Dir['*']
     share('mezuro/kalibro-configurations').install %w(.bundle .env)
-    bin('kalibro-configurations-admin').install builddir('admin.sh')
+    bin.install builddir('admin.sh'), 'kalibro-configurations-admin'
   end
 end

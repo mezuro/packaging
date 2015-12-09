@@ -50,6 +50,6 @@ class KalibroProcessor < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/kalibro-processor/repositories.yml', 'config/repositories.yml'
     share('mezuro/kalibro-processor').install Dir['*']
     share('mezuro/kalibro-processor').install %w(.bundle .env)
-    bin('kalibro-processor-admin').install builddir('admin.sh')
+    bin.install builddir('admin.sh'), 'kalibro-processor-admin'
   end
 end

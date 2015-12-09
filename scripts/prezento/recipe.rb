@@ -48,6 +48,6 @@ class Prezento < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/prezento/secrets.yml', 'config/secrets.yml'
     share('mezuro/prezento').install Dir['*']
     share('mezuro/prezento').install %w(.bundle .env)
-    bin('prezento-admin').install builddir('admin.sh')
+    bin.install builddir('admin.sh'), 'prezento-admin'
   end
 end
