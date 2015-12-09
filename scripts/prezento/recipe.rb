@@ -13,7 +13,7 @@ class Prezento < FPM::Cookery::Recipe
   description MezuroInformations::PREZENTO[:data][:desc]
   arch        'all'
 
-  revision '1'
+  revision MezuroInformations::PREZENTO[:info][:release]
 
   config_files '/etc/mezuro/prezento/database.yml', '/etc/mezuro/prezento/secrets.yml'
 
