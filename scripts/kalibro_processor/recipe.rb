@@ -13,7 +13,7 @@ class KalibroProcessor < FPM::Cookery::Recipe
   description MezuroInformations::KALIBRO_PROCESSOR[:data][:desc]
   arch        'all'
 
-  revision '1'
+  revision MezuroInformations::KALIBRO_PROCESSOR[:info][:release]
 
   config_files '/etc/mezuro/kalibro-processor/database.yml', '/etc/mezuro/kalibro-processor/secrets.yml', '/etc/mezuro/kalibro-processor/repositories.yml'
 
@@ -50,6 +50,6 @@ class KalibroProcessor < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/kalibro-processor/repositories.yml', 'config/repositories.yml'
     share('mezuro/kalibro-processor').install Dir['*']
     share('mezuro/kalibro-processor').install %w(.bundle .env)
-    bin('kalibro-processor-admin').install builddir('admin.sh')
+    bin.install builddir('admin.sh'), 'kalibro-processor-admin'
   end
 end

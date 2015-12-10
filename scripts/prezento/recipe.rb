@@ -13,7 +13,7 @@ class Prezento < FPM::Cookery::Recipe
   description MezuroInformations::PREZENTO[:data][:desc]
   arch        'all'
 
-  revision '1'
+  revision MezuroInformations::PREZENTO[:info][:release]
 
   config_files '/etc/mezuro/prezento/database.yml', '/etc/mezuro/prezento/secrets.yml'
 
@@ -48,6 +48,6 @@ class Prezento < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/prezento/secrets.yml', 'config/secrets.yml'
     share('mezuro/prezento').install Dir['*']
     share('mezuro/prezento').install %w(.bundle .env)
-    bin('prezento-admin').install builddir('admin.sh')
+    bin.install builddir('admin.sh'), 'prezento-admin'
   end
 end
