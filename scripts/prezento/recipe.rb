@@ -1,18 +1,19 @@
 require_relative '../generate_script'
+require_relative '../../mezuro_informations'
 
 class Prezento < FPM::Cookery::Recipe
   include GenerateScript
 
-  name     'prezento'
-  version  '0.9.2'
-  source   'https://github.com/mezuro/prezento.git', :with => :git, :tag => "v#{version}"
+  name     MezuroInformations::PREZENTO[:data][:name]
+  version  MezuroInformations::PREZENTO[:info][:version]
+  source   MezuroInformations::PREZENTO[:data][:vcs_url], :with => :git, :tag => "v#{version}"
 
   maintainer  'Mezuro Team <mezurometrics@gmail.com>'
-  license     'AGPLv3'
-  description 'Collaborative code metrics'
+  license     MezuroInformations::PREZENTO[:data][:licenses][0]
+  description MezuroInformations::PREZENTO[:data][:desc]
   arch        'all'
 
-  revision '1'
+  revision MezuroInformations::PREZENTO[:info][:release]
 
   config_files '/etc/mezuro/prezento/database.yml', '/etc/mezuro/prezento/secrets.yml'
 
@@ -47,6 +48,6 @@ class Prezento < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/prezento/secrets.yml', 'config/secrets.yml'
     share('mezuro/prezento').install Dir['*']
     share('mezuro/prezento').install %w(.bundle .env)
-    bin('prezento-admin').install builddir('admin.sh')
+    bin.install builddir('admin.sh'), 'prezento-admin'
   end
 end

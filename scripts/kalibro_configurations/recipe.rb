@@ -1,18 +1,19 @@
 require_relative '../generate_script'
+require_relative '../../mezuro_informations'
 
 class KalibroConfigurations < FPM::Cookery::Recipe
   include GenerateScript
 
-  name     'kalibro-configurations'
-  version  '1.2.3'
-  source   'https://github.com/mezuro/kalibro_configurations.git', :with => :git, :tag => "v#{version}"
+  name     MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:name]
+  version  MezuroInformations::KALIBRO_CONFIGURATIONS[:info][:version]
+  source   MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:vcs_url], :with => :git, :tag => "v#{version}"
 
   maintainer  'Mezuro Team <mezurometrics@gmail.com>'
-  license     'AGPLv3'
-  description 'Web service for managing code analysis configurations'
+  license     MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:licenses][0]
+  description MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:desc]
   arch        'all'
 
-  revision '1'
+  revision MezuroInformations::KALIBRO_PROCESSOR[:info][:release]
 
   config_files '/etc/mezuro/kalibro-configurations/database.yml', '/etc/mezuro/kalibro-configurations/secrets.yml'
 
@@ -47,6 +48,6 @@ class KalibroConfigurations < FPM::Cookery::Recipe
     ln_s '/etc/mezuro/kalibro-configurations/secrets.yml', 'config/secrets.yml'
     share('mezuro/kalibro-configurations').install Dir['*']
     share('mezuro/kalibro-configurations').install %w(.bundle .env)
-    bin('kalibro-configurations-admin').install builddir('admin.sh')
+    bin.install builddir('admin.sh'), 'kalibro-configurations-admin'
   end
 end

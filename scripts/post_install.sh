@@ -50,7 +50,7 @@ if systemctl start postgresql; then
     $admin_bin rake db:migrate > /dev/null || :
 
     cat <<EOF
-${name} database successfully created. If you want to populate it with default data, please run `$admin_bin rake db:seed`.
+${name} database successfully created. If you want to populate it with default data, please run '$admin_bin rake db:seed'.
 NOTICE: errors may be risen if the required services are not running.
 EOF
   fi
