@@ -79,6 +79,7 @@ namespace :centos do
   kalibro_processor_rpm = rpm_path('kalibro-processor', MezuroInformations::KALIBRO_PROCESSOR[:info])
   prezento_rpm = rpm_path('prezento', MezuroInformations::PREZENTO[:info])
   prezento_nginx_rpm = rpm_path('prezento-nginx', MezuroInformations::PREZENTO_NGINX[:info])
+  prezento_spb_rpm = rpm_path('prezento-spb', MezuroInformations::PREZENTO_SPB[:info])
 
   desc 'Build the KalibroConfigurations package for CentOS'
   task :kalibro_configurations => [:container, kalibro_configurations_rpm]
@@ -112,6 +113,17 @@ namespace :centos do
   file prezento_nginx_rpm => ['scripts/prezento-nginx/recipe.rb',
                               'pkgs/prezento-nginx'] do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento-nginx/run.sh"
+  end
+
+  desc 'Build the Prezento package for CentOS'
+  task :prezento_spb => [:container, prezento_spb_rpm]
+
+  directory 'pkgs/prezento-spb'
+  file prezento_spb_rpm => ['scripts/prezento_spb/recipe.rb',
+                            kalibro_configurations_rpm,
+                            kalibro_processor_rpm,
+                            'pkgs/prezento-spb'] do
+    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento_spb/run.sh /root/mezuro/#{kalibro_configurations_rpm} /root/mezuro/#{kalibro_processor_rpm}"
   end
 
   desc 'Build the whole Docker containerfor CentOS'

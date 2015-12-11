@@ -30,6 +30,12 @@ module MezuroInformations
                        public_download_numbers: true }
              }
 
+  PREZENTO_SPB = PREZENTO.clone
+  PREZENTO_SPB[:data][:name] = 'prezento-spb'
+  PREZENTO_SPB[:data][:vcs_url] = 'http://softwarepublico.gov.br/gitlab/mezuro/prezento.git'
+  PREZENTO_SPB[:data][:website_url] = 'http://softwarepublico.gov.br/mezuro'
+  PREZENTO_SPB[:data][:issue_tracker_url] = 'https://softwarepublico.gov.br/gitlab/mezuro/prezento/issues'
+
   PREZENTO_NGINX = { info: { version: '0.0.2', release: '1' },
                      data: { name: 'prezento-nginx',
                              desc: "Mounts Prezento on NGINX's port 80",
