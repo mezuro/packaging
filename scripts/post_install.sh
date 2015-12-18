@@ -56,6 +56,8 @@ EOF
   fi
 fi
 
+$admin_bin rake tmp:create > /dev/null || :
+
 # Restart the service if it was running
 if [ $WAS_RUNNING -ne 0 ]; then
   systemctl start ${name}.target || :
