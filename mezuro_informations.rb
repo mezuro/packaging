@@ -31,6 +31,7 @@ module MezuroInformations
              }
 
   PREZENTO_SPB = PREZENTO.clone
+  PREZENTO_SPB[:info][:release] = '3'
   PREZENTO_SPB[:data][:name] = 'prezento-spb'
   PREZENTO_SPB[:data][:vcs_url] = 'http://softwarepublico.gov.br/gitlab/mezuro/prezento.git'
   PREZENTO_SPB[:data][:website_url] = 'http://softwarepublico.gov.br/mezuro'
