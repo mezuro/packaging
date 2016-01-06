@@ -22,6 +22,8 @@ cd ${homedir}
 # Install gems from cache
 bundle install --deployment --without development:test > /dev/null
 
+$admin_bin rake tmp:create > /dev/null || :
+
 # Check if the service is running
 WAS_RUNNING=0
 if systemctl is-active --quiet ${name}.target; then
@@ -55,8 +57,6 @@ NOTICE: errors may be risen if the required services are not running.
 EOF
   fi
 fi
-
-$admin_bin rake tmp:create > /dev/null || :
 
 # Restart the service if it was running
 if [ $WAS_RUNNING -ne 0 ]; then
