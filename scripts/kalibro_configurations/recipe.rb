@@ -13,7 +13,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
   description MezuroInformations::KALIBRO_CONFIGURATIONS[:data][:desc]
   arch        'all'
 
-  revision MezuroInformations::KALIBRO_PROCESSOR[:info][:release]
+  revision MezuroInformations::KALIBRO_CONFIGURATIONS[:info][:release]
 
   config_files '/etc/mezuro/kalibro-configurations/database.yml', '/etc/mezuro/kalibro-configurations/secrets.yml'
 
