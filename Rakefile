@@ -119,11 +119,8 @@ namespace :centos do
   task :prezento_spb => [:container, prezento_spb_rpm]
 
   directory 'pkgs/prezento-spb'
-  file prezento_spb_rpm => ['scripts/prezento_spb/recipe.rb',
-                            kalibro_configurations_rpm,
-                            kalibro_processor_rpm,
-                            'pkgs/prezento-spb'] do
-    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento_spb/run.sh /root/mezuro/#{kalibro_configurations_rpm} /root/mezuro/#{kalibro_processor_rpm}"
+  file prezento_spb_rpm => ['scripts/prezento_spb/recipe.rb', 'pkgs/prezento-spb'] do
+    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento_spb/run.sh"
   end
 
   desc 'Build the whole Docker containerfor CentOS'
