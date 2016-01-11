@@ -17,6 +17,8 @@ class Prezento < FPM::Cookery::Recipe
 
   config_files '/etc/mezuro/prezento/database.yml', '/etc/mezuro/prezento/secrets.yml'
 
+  directories '/usr/share/mezuro/prezento'
+
   case platform
   when :centos
     then

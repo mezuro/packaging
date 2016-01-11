@@ -17,6 +17,8 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
   config_files '/etc/mezuro/kalibro-configurations/database.yml', '/etc/mezuro/kalibro-configurations/secrets.yml'
 
+  directories '/usr/share/mezuro/kalibro-configurations'
+
   case platform
   when :centos
     then

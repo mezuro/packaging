@@ -17,6 +17,8 @@ class KalibroProcessor < FPM::Cookery::Recipe
 
   config_files '/etc/mezuro/kalibro-processor/database.yml', '/etc/mezuro/kalibro-processor/secrets.yml', '/etc/mezuro/kalibro-processor/repositories.yml'
 
+  directories '/usr/share/mezuro/kalibro-processor'
+
   case platform
   when :centos
     then
