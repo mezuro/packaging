@@ -22,8 +22,6 @@ cd ${homedir}
 # Install gems from cache
 bundle install --deployment --without development:test > /dev/null
 
-$admin_bin rake tmp:create > /dev/null || :
-
 # Check if the service is running
 WAS_RUNNING=0
 if systemctl is-active --quiet ${name}.target; then
@@ -38,6 +36,11 @@ sed -i 's/StopWhenUnneeded=true/StopWhenUnneeded=false/g' /usr/lib/systemd/syste
 # Create secret token configuration file
 SECRET=$(bundle exec rake secret)
 sed -i "s/<%= ENV\[\"SECRET_KEY_BASE\"\] %>/$SECRET/g" ${configdir}/secrets.yml
+
+# Compile assets
+chown -R ${username}:${username} '/var/log/mezuro'
+chown -R ${username}:${username} '/var/tmp/mezuro'
+$admin_bin rake assets:precompile
 
 # Create postgresql user
 if systemctl start postgresql; then

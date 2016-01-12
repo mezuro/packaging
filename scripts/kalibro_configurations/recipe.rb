@@ -17,6 +17,8 @@ class KalibroConfigurations < FPM::Cookery::Recipe
 
   config_files '/etc/mezuro/kalibro-configurations/database.yml', '/etc/mezuro/kalibro-configurations/secrets.yml'
 
+  directories '/usr/share/mezuro/kalibro-configurations'
+
   case platform
   when :centos
     then
@@ -27,6 +29,7 @@ class KalibroConfigurations < FPM::Cookery::Recipe
   end
 
   post_install "post_install.sh"
+  post_uninstall "post_uninstall.sh"
 
   def build
     inline_replace 'config/database.yml.postgresql_sample' do |s|
@@ -35,19 +38,25 @@ class KalibroConfigurations < FPM::Cookery::Recipe
     end
 
     generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'kalibro-configurations', 8083)
+    generate_script(workdir('../post_uninstall.sh'), workdir('post_uninstall.sh'), 'kalibro-configurations', nil)
     generate_script(workdir("../admin.sh"), builddir("admin.sh"), 'kalibro-configurations', nil)
 
     safesystem("bundle package --all --all-platforms")
   end
 
   def install
+    var('tmp/mezuro/kalibro-configurations').mkdir
+    var('log/mezuro/kalibro-configurations').mkdir
+    rm_rf 'log'
     etc('mezuro/kalibro-configurations').install 'config/database.yml.postgresql_sample', 'database.yml'
-    ln_s '/etc/mezuro/kalibro-configurations/database.yml', 'config/database.yml'
     etc('mezuro/kalibro-configurations').install 'config/secrets.yml', 'secrets.yml'
     rm 'config/secrets.yml'
-    ln_s '/etc/mezuro/kalibro-configurations/secrets.yml', 'config/secrets.yml'
     share('mezuro/kalibro-configurations').install Dir['*']
     share('mezuro/kalibro-configurations').install %w(.bundle .env)
+    ln_s '/etc/mezuro/kalibro-configurations/secrets.yml', share('mezuro/kalibro-configurations/config/secrets.yml')
+    ln_s '/etc/mezuro/kalibro-configurations/database.yml', share('mezuro/kalibro-configurations/config/database.yml')
+    ln_s '/var/tmp/mezuro/kalibro-configurations', share('mezuro/kalibro-configurations/tmp')
+    ln_s '/var/log/mezuro/kalibro-configurations', share('mezuro/kalibro-configurations/log')
     bin.install builddir('admin.sh'), 'kalibro-configurations-admin'
   end
 end
