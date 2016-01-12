@@ -31,6 +31,9 @@ module MezuroInformations
              }
 
   PREZENTO_SPB = PREZENTO.clone
+  # Ruby does not have a deep clone method. This is needed so PREZENTO_SPB does not
+  # override PREZENTO's data.
+  PREZENTO_SPB[:data] = PREZENTO[:data].clone
   PREZENTO_SPB[:data][:name] = 'prezento-spb'
   PREZENTO_SPB[:data][:vcs_url] = 'http://softwarepublico.gov.br/gitlab/mezuro/prezento.git'
   PREZENTO_SPB[:data][:website_url] = 'http://softwarepublico.gov.br/mezuro'
