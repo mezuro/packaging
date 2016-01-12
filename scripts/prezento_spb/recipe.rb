@@ -4,7 +4,7 @@ require_relative '../prezento/recipe'
 class PrezentoSPB < Prezento
   name     MezuroInformations::PREZENTO_SPB[:data][:name]
   version  MezuroInformations::PREZENTO_SPB[:info][:version]
-  source   MezuroInformations::PREZENTO_SPB[:data][:vcs_url], :with => :git, :tag => "v#{version}.colab5"
+  source   MezuroInformations::PREZENTO_SPB[:data][:vcs_url], :with => :git, :tag => "v#{version}.colab"
 
   maintainer  'Mezuro Team <mezurometrics@gmail.com>'
   license     MezuroInformations::PREZENTO_SPB[:data][:licenses][0]
@@ -15,5 +15,8 @@ class PrezentoSPB < Prezento
 
   depends 'postgresql', 'postgresql-server', 'ruby', 'ruby-devel', 'gcc', 'gcc-c++', 'patch', 'zlib-devel', 'rubygem-bundler', 'sqlite-devel', 'postgresql-devel', 'redhat-rpm-config'
 
+  directories '/usr/share/mezuro/prezento'
+
   post_install "post_install.sh"
+  post_uninstall 'post_uninstall.sh'
 end
