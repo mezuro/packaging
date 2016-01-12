@@ -29,6 +29,7 @@ class Prezento < FPM::Cookery::Recipe
   end
 
   post_install "post_install.sh"
+  post_uninstall 'post_uninstall.sh'
 
   def build
     inline_replace 'config/database.yml.postgresql_sample' do |s|
@@ -37,18 +38,24 @@ class Prezento < FPM::Cookery::Recipe
     end
 
     generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'prezento', 8081)
+    generate_script(workdir('../post_uninstall.sh'), workdir('post_uninstall.sh'), 'prezento', nil)
     generate_script(workdir("../admin.sh"), builddir("admin.sh"), 'prezento', nil)
 
     safesystem("bundle package --all --all-platforms")
   end
 
   def install
+    var('tmp/mezuro/prezento').mkdir
+    var('log/mezuro/prezento').mkdir
+    rm_rf 'log'
     etc('mezuro/prezento').install 'config/database.yml.postgresql_sample', 'database.yml'
-    ln_s '/etc/mezuro/prezento/database.yml', 'config/database.yml'
     etc('mezuro/prezento').install 'config/secrets.yml', 'secrets.yml'
     rm 'config/secrets.yml'
-    ln_s '/etc/mezuro/prezento/secrets.yml', 'config/secrets.yml'
     share('mezuro/prezento').install Dir['*']
+    ln_s '/var/tmp/mezuro/prezento', share('mezuro/prezento/tmp')
+    ln_s '/var/log/mezuro/prezento', share('mezuro/prezento/log')
+    ln_s '/etc/mezuro/prezento/database.yml', share('mezuro/prezento/config/database.yml')
+    ln_s '/etc/mezuro/prezento/secrets.yml', share('mezuro/prezento/config/secrets.yml')
     share('mezuro/prezento').install %w(.bundle .env)
     bin.install builddir('admin.sh'), 'prezento-admin'
   end

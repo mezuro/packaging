@@ -29,6 +29,7 @@ class KalibroProcessor < FPM::Cookery::Recipe
   end
 
   post_install "post_install.sh"
+  post_uninstall "post_uninstall.sh"
 
   def build
     inline_replace 'config/database.yml.sample' do |s|
@@ -37,20 +38,26 @@ class KalibroProcessor < FPM::Cookery::Recipe
     end
 
     generate_script(workdir("../post_install.sh"), workdir("post_install.sh"), 'kalibro-processor', 8082)
+    generate_script(workdir('../post_uninstall.sh'), workdir('post_uninstall.sh'), 'kalibro-processor', nil)
     generate_script(workdir("../admin.sh"), builddir("admin.sh"), 'kalibro-processor', nil)
 
     safesystem("bundle package --all --all-platforms")
   end
 
   def install
+    var('tmp/mezuro/kalibro-processor').mkdir
+    var('log/mezuro/kalibro-processor').mkdir
+    rm_rf 'log'
     etc('mezuro/kalibro-processor').install 'config/database.yml.sample', 'database.yml'
-    ln_s '/etc/mezuro/kalibro-processor/database.yml', 'config/database.yml'
     etc('mezuro/kalibro-processor').install 'config/secrets.yml', 'secrets.yml'
     rm 'config/secrets.yml'
-    ln_s '/etc/mezuro/kalibro-processor/secrets.yml', 'config/secrets.yml'
     etc('mezuro/kalibro-processor').install 'config/repositories.yml.sample', 'repositories.yml'
-    ln_s '/etc/mezuro/kalibro-processor/repositories.yml', 'config/repositories.yml'
     share('mezuro/kalibro-processor').install Dir['*']
+    ln_s '/etc/mezuro/kalibro-processor/database.yml', share('mezuro/kalibro-processor/config/database.yml')
+    ln_s '/etc/mezuro/kalibro-processor/secrets.yml', share('mezuro/kalibro-processor/config/secrets.yml')
+    ln_s '/etc/mezuro/kalibro-processor/repositories.yml', share('mezuro/kalibro-processor/config/repositories.yml')
+    ln_s '/var/tmp/mezuro/kalibro-processor', share('mezuro/kalibro-processor/tmp')
+    ln_s '/var/log/mezuro/kalibro-processor', share('mezuro/kalibro-processor/log')
     share('mezuro/kalibro-processor').install %w(.bundle .env)
     bin.install builddir('admin.sh'), 'kalibro-processor-admin'
   end
