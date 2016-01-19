@@ -38,8 +38,8 @@ SECRET=$(bundle exec rake secret)
 sed -i "s/<%= ENV\[\"SECRET_KEY_BASE\"\] %>/$SECRET/g" ${configdir}/secrets.yml
 
 # Compile assets
-chown -R ${username}:${username} '/var/log/mezuro'
-chown -R ${username}:${username} '/var/tmp/mezuro'
+chown -R ${username}:${username} '/var/log/mezuro/${name}'
+chown -R ${username}:${username} '/var/tmp/mezuro/${name}'
 $admin_bin rake assets:precompile
 
 # Create postgresql user
