@@ -15,8 +15,9 @@ admin_bin="${name}-admin"
 getent group ${username} >/dev/null || groupadd --system ${username}
 if ! getent passwd ${username} >/dev/null; then
   useradd --system --gid ${username} --home-dir ${homedir} --shell /sbin/nologin ${username} >/dev/null
-  chown -R ${username}:${username} ${homedir}
 fi
+
+chown -R ${username}:${username} ${homedir}
 
 cd ${homedir}
 # Install gems from cache
