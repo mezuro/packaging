@@ -15,8 +15,9 @@ admin_bin="${name}-admin"
 getent group ${username} >/dev/null || groupadd --system ${username}
 if ! getent passwd ${username} >/dev/null; then
   useradd --system --gid ${username} --home-dir ${homedir} --shell /sbin/nologin ${username} >/dev/null
-  chown -R ${username}:${username} ${homedir}
 fi
+
+chown -R ${username}:${username} ${homedir}
 
 cd ${homedir}
 # Install gems from cache
@@ -38,8 +39,8 @@ SECRET=$(bundle exec rake secret)
 sed -i "s/<%= ENV\[\"SECRET_KEY_BASE\"\] %>/$SECRET/g" ${configdir}/secrets.yml
 
 # Compile assets
-chown -R ${username}:${username} '/var/log/mezuro/${name}'
-chown -R ${username}:${username} '/var/tmp/mezuro/${name}'
+chown -R ${username}:${username} /var/log/mezuro/${name}
+chown -R ${username}:${username} /var/tmp/mezuro/${name}
 $admin_bin rake assets:precompile
 
 # Create postgresql user
