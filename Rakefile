@@ -62,7 +62,7 @@ end
 
 namespace :centos do
   desc 'Build the whole Mezuro packages for CentOS'
-  task :all => :prezento do
+  task :all => [:prezento, :prezento_nginx] do
   end
 
   kalibro_configurations_rpm = rpm_path('kalibro-configurations', MezuroInformations::KALIBRO_CONFIGURATIONS[:info])
