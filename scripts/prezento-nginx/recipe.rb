@@ -13,14 +13,12 @@ class PrezentoNginx < FPM::Cookery::Recipe
 
   config_files '/etc/nginx/conf.d/prezento.conf'
 
+  depends 'nginx'
+
   case platform
   when :centos
     then
-    depends 'nginx'
     post_install "post_install.sh"
-  when :debian
-    then
-    raise NotImplementedError
   end
 
 

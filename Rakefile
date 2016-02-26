@@ -17,11 +17,12 @@ directory 'pkgs/prezento-nginx'
 
 namespace :debian do
   desc 'Build the whole Mezuro packages for Debian'
-  task :all => [:prezento]
+  task :all => [:prezento, :prezento_nginx]
 
   kalibro_configurations_deb = deb_path('kalibro-configurations', MezuroInformations::KALIBRO_CONFIGURATIONS[:info])
   kalibro_processor_deb = deb_path('kalibro-processor', MezuroInformations::KALIBRO_PROCESSOR[:info])
   prezento_deb = deb_path('prezento', MezuroInformations::PREZENTO[:info])
+  prezento_nginx_deb = deb_path('prezento-nginx', MezuroInformations::PREZENTO_NGINX[:info])
 
   desc 'Build the KalibroConfigurations package for Debian'
   task :kalibro_configurations => [:container, kalibro_configurations_deb]
@@ -48,6 +49,15 @@ namespace :debian do
                         'pkgs/prezento'] do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-debian-build bash /root/mezuro/scripts/prezento/run.sh /root/mezuro/#{kalibro_configurations_deb} /root/mezuro/#{kalibro_processor_deb}"
   end
+
+  desc 'Build the Prezento NGINX proxy configuration package for CentOS'
+  task :prezento_nginx => [:container, prezento_nginx_deb]
+
+  file prezento_nginx_deb => ['scripts/prezento-nginx/recipe.rb',
+                              'pkgs/prezento-nginx'] do
+    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-debian-build bash /root/mezuro/scripts/prezento-nginx/run.sh"
+  end
+
 
   desc 'Build the whole Docker container for Debian'
   task :container => ['Dockerfile-debian'] do
