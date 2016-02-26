@@ -11,20 +11,22 @@ class PrezentoNginx < FPM::Cookery::Recipe
 
   revision MezuroInformations::PREZENTO_NGINX[:info][:release]
 
-  config_files '/etc/nginx/default.d/prezento.conf'
+  config_files '/etc/nginx/conf.d/prezento.conf'
 
   case platform
   when :centos
     then
     depends 'nginx'
+    post_install "post_install.sh"
   when :debian
     then
     raise NotImplementedError
   end
 
+
   def build; end
 
   def install
-    etc('nginx/default.d').install 'prezento.conf'
+    etc('nginx/conf.d').install 'prezento.conf'
   end
 end
