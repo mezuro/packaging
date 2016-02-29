@@ -13,14 +13,16 @@ RSpec::Core::RakeTask.new(:spec)
 directory 'pkgs/kalibro-configurations'
 directory 'pkgs/kalibro-processor'
 directory 'pkgs/prezento'
+directory 'pkgs/prezento-nginx'
 
 namespace :debian do
   desc 'Build the whole Mezuro packages for Debian'
-  task :all => [:prezento]
+  task :all => [:prezento, :prezento_nginx]
 
   kalibro_configurations_deb = deb_path('kalibro-configurations', MezuroInformations::KALIBRO_CONFIGURATIONS[:info])
   kalibro_processor_deb = deb_path('kalibro-processor', MezuroInformations::KALIBRO_PROCESSOR[:info])
   prezento_deb = deb_path('prezento', MezuroInformations::PREZENTO[:info])
+  prezento_nginx_deb = deb_path('prezento-nginx', MezuroInformations::PREZENTO_NGINX[:info])
 
   desc 'Build the KalibroConfigurations package for Debian'
   task :kalibro_configurations => [:container, kalibro_configurations_deb]
@@ -48,6 +50,15 @@ namespace :debian do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-debian-build bash /root/mezuro/scripts/prezento/run.sh /root/mezuro/#{kalibro_configurations_deb} /root/mezuro/#{kalibro_processor_deb}"
   end
 
+  desc 'Build the Prezento NGINX proxy configuration package for CentOS'
+  task :prezento_nginx => [:container, prezento_nginx_deb]
+
+  file prezento_nginx_deb => ['scripts/prezento-nginx/recipe.rb',
+                              'pkgs/prezento-nginx'] do
+    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-debian-build bash /root/mezuro/scripts/prezento-nginx/run.sh"
+  end
+
+
   desc 'Build the whole Docker container for Debian'
   task :container => ['Dockerfile-debian'] do
     sh 'docker build --rm=true --tag mezuro-debian-build -f Dockerfile-debian .'
@@ -61,12 +72,13 @@ end
 
 namespace :centos do
   desc 'Build the whole Mezuro packages for CentOS'
-  task :all => :prezento do
+  task :all => [:prezento, :prezento_nginx] do
   end
 
   kalibro_configurations_rpm = rpm_path('kalibro-configurations', MezuroInformations::KALIBRO_CONFIGURATIONS[:info])
   kalibro_processor_rpm = rpm_path('kalibro-processor', MezuroInformations::KALIBRO_PROCESSOR[:info])
   prezento_rpm = rpm_path('prezento', MezuroInformations::PREZENTO[:info])
+  prezento_nginx_rpm = rpm_path('prezento-nginx', MezuroInformations::PREZENTO_NGINX[:info])
 
   desc 'Build the KalibroConfigurations package for CentOS'
   task :kalibro_configurations => [:container, kalibro_configurations_rpm]
@@ -92,6 +104,14 @@ namespace :centos do
                         kalibro_processor_rpm,
                         'pkgs/prezento'] do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento/run.sh /root/mezuro/#{kalibro_configurations_rpm} /root/mezuro/#{kalibro_processor_rpm}"
+  end
+
+  desc 'Build the Prezento NGINX proxy configuration package for CentOS'
+  task :prezento_nginx => [:container, prezento_nginx_rpm]
+
+  file prezento_nginx_rpm => ['scripts/prezento-nginx/recipe.rb',
+                              'pkgs/prezento-nginx'] do
+    sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento-nginx/run.sh"
   end
 
   desc 'Build the whole Docker containerfor CentOS'
