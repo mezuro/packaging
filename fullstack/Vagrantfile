@@ -82,7 +82,7 @@ Vagrant.configure(2) do |config|
     # Mezuro setup
     yum -y install /root/mezuro/pkgs/kalibro-configurations/kalibro-configurations-#{MezuroInformations::KALIBRO_CONFIGURATIONS[:info][:version]}-#{MezuroInformations::KALIBRO_CONFIGURATIONS[:info][:release]}.noarch.rpm
     yum -y install /root/mezuro/pkgs/kalibro-processor/kalibro-processor-#{MezuroInformations::KALIBRO_PROCESSOR[:info][:version]}-#{MezuroInformations::KALIBRO_PROCESSOR[:info][:release]}.noarch.rpm
-    yum -y install /root/mezuro/pkgs/prezento/prezento-#{MezuroInformations::PREZENTO[:info][:version]}-#{MezuroInformations::PREZENTO[:info][:release]}.noarch.rpm
+    yum -y install /root/mezuro/pkgs/prezento-spb/prezento-#{MezuroInformations::PREZENTO_SPB[:info][:version]}-#{MezuroInformations::PREZENTO_SPB[:info][:release]}.noarch.rpm
 
     # NGINX proxy setup
     yum -y install /root/mezuro/pkgs/prezento-nginx/prezento-nginx-#{MezuroInformations::PREZENTO_NGINX[:info][:version]}-#{MezuroInformations::PREZENTO_NGINX[:info][:release]}.noarch.rpm

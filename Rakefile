@@ -107,6 +107,7 @@ namespace :centos do
     sh "docker run -t -i --volume=#{Dir.pwd}/pkgs:/root/mezuro/pkgs mezuro-centos-build bash /root/mezuro/scripts/prezento/run.sh /root/mezuro/#{kalibro_configurations_rpm} /root/mezuro/#{kalibro_processor_rpm}"
   end
 
+	end
   desc 'Build the Prezento NGINX proxy configuration package for CentOS'
   task :prezento_nginx => [:container, prezento_nginx_rpm]
 
