@@ -1,5 +1,5 @@
 module MezuroInformations
-  KALIBRO_PROCESSOR = { info: { version: '1.1.9', release: '1' },
+  KALIBRO_PROCESSOR = { info: { version: '1.1.10', release: '1' },
                         data: { name: 'kalibro-processor',
                                 desc: 'Web service for static source code analysis',
                                 labels: ['web service', 'code analysis', 'source code metrics'],
