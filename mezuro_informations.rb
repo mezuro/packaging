@@ -30,7 +30,7 @@ module MezuroInformations
                        public_download_numbers: true }
              }
 
-  PREZENTO_NGINX = { info: { version: '0.0.1', release: '1' },
+  PREZENTO_NGINX = { info: { version: '0.0.2', release: '1' },
                      data: { name: 'prezento-nginx',
                              desc: "Mounts Prezento on NGINX's port 80",
                              public_download_numbers: true }
