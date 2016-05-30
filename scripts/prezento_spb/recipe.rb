@@ -13,7 +13,7 @@ class PrezentoSPB < Prezento
 
   revision MezuroInformations::PREZENTO_SPB[:info][:release]
 
-  depends 'postgresql', 'postgresql-server', 'ruby', 'ruby-devel', 'gcc', 'gcc-c++', 'patch', 'zlib-devel', 'rubygem-bundler', 'sqlite-devel', 'postgresql-devel', 'redhat-rpm-config'
+  depends 'postgresql', 'postgresql-server', 'ruby', 'ruby-devel', 'gcc', 'gcc-c++', 'patch', 'zlib-devel', 'rubygem-bundler', 'sqlite-devel', 'postgresql-devel', 'redhat-rpm-config', 'libxml2-devel', 'libxslt-devel'
 
   directories '/usr/share/mezuro/prezento'
 
