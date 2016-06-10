@@ -39,7 +39,7 @@ module MezuroInformations
   PREZENTO_SPB[:data][:website_url] = 'http://softwarepublico.gov.br/mezuro'
   PREZENTO_SPB[:data][:issue_tracker_url] = 'https://softwarepublico.gov.br/gitlab/mezuro/prezento/issues'
   PREZENTO_SPB[:info] = PREZENTO[:info].clone
-  PREZENTO_SPB_EXTRA_RELEASE = '1' # Enables extra releases with fixes relative to the SPB environment. Leave it blank if there are no extra releases.
+  PREZENTO_SPB_EXTRA_RELEASE = '2' # Enables extra releases with fixes relative to the SPB environment. Leave it blank if there are no extra releases.
 
   PREZENTO_NGINX = { info: { version: '0.0.2', release: '1' },
                      data: { name: 'prezento-nginx',
