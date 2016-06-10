@@ -50,12 +50,14 @@ class Prezento < FPM::Cookery::Recipe
     rm_rf 'log'
     etc('mezuro/prezento').install 'config/database.yml.postgresql_sample', 'database.yml'
     etc('mezuro/prezento').install 'config/secrets.yml', 'secrets.yml'
+    etc('mezuro/prezento').install 'config/kalibro.yml.sample', 'kalibro.yml'
     rm 'config/secrets.yml'
     share('mezuro/prezento').install Dir['*']
     ln_s '/var/tmp/mezuro/prezento', share('mezuro/prezento/tmp')
     ln_s '/var/log/mezuro/prezento', share('mezuro/prezento/log')
     ln_s '/etc/mezuro/prezento/database.yml', share('mezuro/prezento/config/database.yml')
     ln_s '/etc/mezuro/prezento/secrets.yml', share('mezuro/prezento/config/secrets.yml')
+    ln_s '/etc/mezuro/prezento/kalibro.yml', share('mezuro/prezento/config/kalibro.yml')
     share('mezuro/prezento').install %w(.bundle .env)
     bin.install builddir('admin.sh'), 'prezento-admin'
   end

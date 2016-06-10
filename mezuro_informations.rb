@@ -19,7 +19,7 @@ module MezuroInformations
                                      issue_tracker_url: 'https://github.com/mezuro/kalibro_configurations/issues',
                                      public_download_numbers: true }
                            }
-  PREZENTO = { info: { version: '1.0.1', release: '2' },
+  PREZENTO = { info: { version: '1.1.0', release: '1' },
                data: { name: 'prezento',
                        desc: 'Collaborative code metrics',
                        labels: ['web interface', 'source code metrics'],
