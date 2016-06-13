@@ -25,7 +25,7 @@ class KalibroProcessor < FPM::Cookery::Recipe
     depends 'postgresql', 'postgresql-server', 'ruby', 'ruby-devel', 'gcc', 'gcc-c++', 'patch', 'zlib-devel', 'rubygem-bundler', 'sqlite-devel', 'postgresql-devel', 'redhat-rpm-config', 'git', 'libxml2-devel', 'libxslt-devel'
   when :debian
     then
-    depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-9.4', 'git', 'libxml2-dev', 'libxslt1-dev'
+    depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-all', 'git', 'libxml2-dev', 'libxslt1-dev'
   end
 
   post_install "post_install.sh"
