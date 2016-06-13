@@ -15,7 +15,7 @@ class Prezento < FPM::Cookery::Recipe
 
   revision MezuroInformations::PREZENTO[:info][:release]
 
-  config_files '/etc/mezuro/prezento/database.yml', '/etc/mezuro/prezento/secrets.yml'
+  config_files '/etc/mezuro/prezento/database.yml', '/etc/mezuro/prezento/secrets.yml', '/etc/mezuro/prezento/kalibro.yml'
 
   directories '/usr/share/mezuro/prezento'
 
