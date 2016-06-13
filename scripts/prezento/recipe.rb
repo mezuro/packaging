@@ -15,7 +15,7 @@ class Prezento < FPM::Cookery::Recipe
 
   revision MezuroInformations::PREZENTO[:info][:release]
 
-  config_files '/etc/mezuro/prezento/database.yml', '/etc/mezuro/prezento/secrets.yml'
+  config_files '/etc/mezuro/prezento/database.yml', '/etc/mezuro/prezento/secrets.yml', '/etc/mezuro/prezento/kalibro.yml'
 
   directories '/usr/share/mezuro/prezento'
 
@@ -25,7 +25,7 @@ class Prezento < FPM::Cookery::Recipe
     depends 'postgresql', 'postgresql-server', 'ruby', 'ruby-devel', 'gcc', 'gcc-c++', 'patch', 'zlib-devel', 'rubygem-bundler', 'sqlite-devel', 'postgresql-devel', 'redhat-rpm-config', 'kalibro-processor', 'kalibro-configurations', 'libxml2-devel', 'libxslt-devel'
   when :debian
     then
-    depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-9.4', 'kalibro-processor', 'kalibro-configurations', 'libxml2-dev', 'libxslt1-dev'
+    depends 'postgresql', 'ruby', 'bundler', 'libsqlite3-dev', 'postgresql-server-dev-all', 'kalibro-processor', 'kalibro-configurations', 'libxml2-dev', 'libxslt1-dev'
   end
 
   post_install "post_install.sh"
